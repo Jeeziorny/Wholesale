@@ -3,5 +3,7 @@ package enums;
 public enum OrderStatus {
   SUSPENDED,
   PENDING,
-  DONE
+  DONE,
+  LACK_OF_MATERIALS,
+  CONSTRUCTION,
 }

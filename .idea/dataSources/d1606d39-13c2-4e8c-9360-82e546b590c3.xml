@@ -1135,276 +1135,279 @@
     <table id="289" parent="13" name="order_item"/>
     <table id="290" parent="13" name="orders"/>
     <table id="291" parent="13" name="warehouse"/>
-    <column id="292" parent="285" name="id">
+    <routine id="292" parent="13" name="fill_chipboard_table">
+      <RoutineKind>procedure</RoutineKind>
+    </routine>
+    <routine id="293" parent="13" name="fill_orderItem">
+      <RoutineKind>procedure</RoutineKind>
+    </routine>
+    <routine id="294" parent="13" name="fill_orders_and_orderItem">
+      <RoutineKind>procedure</RoutineKind>
+    </routine>
+    <column id="295" parent="285" name="id">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="293" parent="285" name="sizeId">
+    <column id="296" parent="285" name="sizeId">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="294" parent="285" name="cost">
+    <column id="297" parent="285" name="cost">
       <Position>3</Position>
       <DataType>double|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="295" parent="285" name="suppId">
-      <Position>4</Position>
-      <DataType>int(11)|0s</DataType>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <index id="296" parent="285" name="sizeId">
+    <index id="298" parent="285" name="sizeId">
       <ColNames>sizeId</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="297" parent="285" name="PRIMARY">
+    <key id="299" parent="285" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="298" parent="285" name="chipboard_ibfk_1">
+    <foreign-key id="300" parent="285" name="chipboard_ibfk_1">
       <ColNames>sizeId</ColNames>
       <RefSchemaName>wholesale</RefSchemaName>
       <RefTableName>chipboard_size</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="299" parent="286" name="id">
+    <column id="301" parent="286" name="id">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="300" parent="286" name="length">
+    <column id="302" parent="286" name="length">
       <Position>2</Position>
       <Comment>unit: milimeters</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="301" parent="286" name="width">
+    <column id="303" parent="286" name="width">
       <Position>3</Position>
       <Comment>unit: milimeters</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="302" parent="286" name="thicknes">
+    <column id="304" parent="286" name="thicknes">
       <Position>4</Position>
       <Comment>unit: milimeters</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="303" parent="286" name="PRIMARY">
+    <key id="305" parent="286" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <trigger id="304" parent="286" name="sizes_before_insert">
+    <trigger id="306" parent="286" name="sizes_before_insert">
       <Turn>before-row</Turn>
       <Events>I</Events>
     </trigger>
-    <trigger id="305" parent="286" name="sizes_before_update">
+    <trigger id="307" parent="286" name="sizes_before_update">
       <Turn>before-row</Turn>
       <Events>U</Events>
     </trigger>
-    <trigger id="306" parent="286" name="sizes_before_delete">
+    <trigger id="308" parent="286" name="sizes_before_delete">
       <Turn>before-row</Turn>
       <Events>D</Events>
     </trigger>
-    <column id="307" parent="287" name="id">
+    <column id="309" parent="287" name="id">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="308" parent="287" name="NIP">
+    <column id="310" parent="287" name="NIP">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="309" parent="287" name="name">
+    <column id="311" parent="287" name="name">
       <Position>3</Position>
       <DataType>varchar(45)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="310" parent="287" name="discount">
+    <column id="312" parent="287" name="discount">
       <Position>4</Position>
       <DataType>double|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="311" parent="287" name="NIP">
+    <index id="313" parent="287" name="NIP">
       <ColNames>NIP</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <key id="312" parent="287" name="PRIMARY">
+    <key id="314" parent="287" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="313" parent="287" name="NIP">
+    <key id="315" parent="287" name="NIP">
       <ColNames>NIP</ColNames>
       <UnderlyingIndexName>NIP</UnderlyingIndexName>
     </key>
-    <column id="314" parent="288" name="operationId">
+    <column id="316" parent="288" name="operationId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="315" parent="288" name="operation_value">
+    <column id="317" parent="288" name="operation_value">
       <Position>2</Position>
       <DataType>double|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="316" parent="288" name="orderId">
+    <column id="318" parent="288" name="orderId">
       <Position>3</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="317" parent="288" name="operation_date">
+    <column id="319" parent="288" name="operation_date">
       <Position>4</Position>
       <DataType>datetime|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="318" parent="288" name="orderId">
+    <index id="320" parent="288" name="orderId">
       <ColNames>orderId</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="319" parent="288" name="PRIMARY">
+    <key id="321" parent="288" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>operationId</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="320" parent="288" name="income_ibfk_1">
+    <foreign-key id="322" parent="288" name="income_ibfk_1">
       <ColNames>orderId</ColNames>
       <RefSchemaName>wholesale</RefSchemaName>
       <RefTableName>orders</RefTableName>
       <RefColNames>id</RefColNames>
       <OnDelete>cascade</OnDelete>
     </foreign-key>
-    <column id="321" parent="289" name="chipboardId">
+    <column id="323" parent="289" name="chipboardId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="322" parent="289" name="quantity">
+    <column id="324" parent="289" name="quantity">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="323" parent="289" name="orderId">
+    <column id="325" parent="289" name="orderId">
       <Position>3</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="324" parent="289" name="chipboardId">
+    <index id="326" parent="289" name="chipboardId">
       <ColNames>chipboardId</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="325" parent="289" name="idx">
+    <index id="327" parent="289" name="idx">
       <ColNames>orderId</ColNames>
       <Type>btree</Type>
     </index>
-    <foreign-key id="326" parent="289" name="order_item_ibfk_1">
+    <foreign-key id="328" parent="289" name="order_item_ibfk_1">
       <ColNames>chipboardId</ColNames>
       <RefSchemaName>wholesale</RefSchemaName>
       <RefTableName>chipboard</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <foreign-key id="327" parent="289" name="order_item_ibfk_2">
+    <foreign-key id="329" parent="289" name="order_item_ibfk_2">
       <ColNames>orderId</ColNames>
       <RefSchemaName>wholesale</RefSchemaName>
       <RefTableName>orders</RefTableName>
       <RefColNames>id</RefColNames>
       <OnDelete>cascade</OnDelete>
     </foreign-key>
-    <column id="328" parent="290" name="id">
+    <column id="330" parent="290" name="id">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="329" parent="290" name="customerId">
+    <column id="331" parent="290" name="customerId">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="330" parent="290" name="charge">
+    <column id="332" parent="290" name="paymentStatus">
       <Position>3</Position>
-      <DataType>double|0s</DataType>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="331" parent="290" name="paymentStatus">
-      <Position>4</Position>
       <DataType>enum(&apos;DONE&apos;, &apos;PENDING&apos;)|0e</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="332" parent="290" name="orderStatus">
-      <Position>5</Position>
-      <DataType>enum(&apos;SUSPENDED&apos;, &apos;PENDING&apos;, &apos;DONE&apos;)|0e</DataType>
+    <column id="333" parent="290" name="orderStatus">
+      <Position>4</Position>
+      <DataType>enum(&apos;SUSPENDED&apos;, &apos;PENDING&apos;, &apos;DONE&apos;, &apos;LACK OF MATERIALS&apos;, &apos;CONSTRUCTION&apos;)|0e</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="333" parent="290" name="customerId">
+    <index id="334" parent="290" name="customerId">
       <ColNames>customerId</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="334" parent="290" name="PRIMARY">
+    <key id="335" parent="290" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="335" parent="290" name="orders_ibfk_1">
+    <foreign-key id="336" parent="290" name="orders_ibfk_1">
       <ColNames>customerId</ColNames>
       <RefSchemaName>wholesale</RefSchemaName>
       <RefTableName>customers</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <trigger id="336" parent="290" name="orders_after_update">
+    <trigger id="337" parent="290" name="orders_after_update">
       <Turn>before-row</Turn>
       <Events>U</Events>
     </trigger>
-    <trigger id="337" parent="290" name="orders_before_delete">
+    <trigger id="338" parent="290" name="orders_before_delete">
       <Turn>before-row</Turn>
       <Events>D</Events>
     </trigger>
-    <column id="338" parent="291" name="chipboardId">
+    <column id="339" parent="291" name="chipboardId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="339" parent="291" name="quantity">
+    <column id="340" parent="291" name="quantity">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="340" parent="291" name="chipboardId">
+    <index id="341" parent="291" name="chipboardId">
       <ColNames>chipboardId</ColNames>
       <Type>btree</Type>
     </index>
-    <foreign-key id="341" parent="291" name="warehouse_ibfk_1">
+    <foreign-key id="342" parent="291" name="warehouse_ibfk_1">
       <ColNames>chipboardId</ColNames>
       <RefSchemaName>wholesale</RefSchemaName>
       <RefTableName>chipboard</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
+    <argument id="343" parent="293" name="IDOrder">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+    </argument>
   </database-model>
 </dataSource>

@@ -58,7 +58,6 @@
             <generator class="native"/>
         </id>
         <property name = "customerId" column = "customerId" type = "int"/>
-        <property name="charge" column="charge" type="double" />
         <property name="paymentStatus" column="paymentStatus" type="org.hibernate.type.EnumType" />
         <property name="orderStatus" column="orderStatus" type="org.hibernate.type.EnumType" />
     </class>
