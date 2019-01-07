@@ -1,3 +1,5 @@
+package models;
+
 import java.sql.Timestamp;
 
 public class Income {
@@ -5,14 +7,6 @@ public class Income {
   private double operation_value;
   private int orderId;
   private Timestamp date;
-
-  public Timestamp getDate() {
-    return date;
-  }
-
-  public void setDate(Timestamp date) {
-    this.date = date;
-  }
 
   public Income(int operationId, double operation_value, int orderId, Timestamp timestamp) {
     this.operationId = operationId;
@@ -48,11 +42,11 @@ public class Income {
     this.orderId = orderId;
   }
 
-  public Timestamp getTimestamp() {
+  public Timestamp getDate() {
     return date;
   }
 
-  public void setTimestamp(Timestamp timestamp) {
+  public void setDate(Timestamp timestamp) {
     this.date = timestamp;
   }
 }

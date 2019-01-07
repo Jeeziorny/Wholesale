@@ -1,4 +1,4 @@
-package enums;
+package models.enums;
 
 public enum OrderStatus {
   SUSPENDED,
@@ -6,4 +6,5 @@ public enum OrderStatus {
   DONE,
   LACK_OF_MATERIALS,
   CONSTRUCTION,
+  ISSUED,
 }

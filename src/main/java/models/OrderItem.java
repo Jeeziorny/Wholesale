@@ -1,13 +1,19 @@
-public class Warehouse {
+package models;
+
+import java.io.Serializable;
+
+public class OrderItem implements Serializable {
   private int chipboardId;
   private int quantity;
+  private int orderId;
 
-  public Warehouse(int chipboardId, int quantity) {
+  public OrderItem(int chipboardId, int quantity, int orderId) {
     this.chipboardId = chipboardId;
     this.quantity = quantity;
+    this.orderId = orderId;
   }
 
-  public Warehouse() {
+  public OrderItem() {
   }
 
   public int getChipboardId() {
@@ -24,5 +30,13 @@ public class Warehouse {
 
   public void setQuantity(int quantity) {
     this.quantity = quantity;
+  }
+
+  public int getOrderId() {
+    return orderId;
+  }
+
+  public void setOrderId(int orderId) {
+    this.orderId = orderId;
   }
 }

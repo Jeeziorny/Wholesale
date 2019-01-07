@@ -1,3 +1,4 @@
+package models;
 
 public class ChipboardSize {
   private int id;

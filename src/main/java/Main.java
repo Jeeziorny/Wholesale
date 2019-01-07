@@ -1,22 +1,27 @@
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+
+import java.util.List;
 
 public class Main extends Application {
   public static void main(String[] args)
   {
     System.out.println("Maven + Hibernate + MySQL");
-    launch(args);
     Session session = HibernateUtil.getSessionFactory().openSession();
-//    session.beginTransaction();
-//    ChipboardSize size = new ChipboardSize();
-//
-//    size.setWidth(1000);
-//    size.setLength(999);
-//    size.setThicknes(45);
-//
-//    session.save(size);
-//    session.getTransaction().commit();
+    session.beginTransaction();
+
+    String q = "SELECT COUNT(*)" +
+               "FROM Chipboard";
+    Query query = session.createQuery(q);
+    List result = query.list();
+
+    System.out.println("ODPOWIEDZ: " + result.get(0) + " <--");
+
+    session.getTransaction().commit();
+
+    launch(args);
 
   }
 

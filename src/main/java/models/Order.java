@@ -1,5 +1,7 @@
-import enums.OrderStatus;
-import enums.PaymentStatus;
+package models;
+
+import models.enums.OrderStatus;
+import models.enums.PaymentStatus;
 
 public class Order {
   private int id;

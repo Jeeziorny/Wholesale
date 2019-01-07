@@ -4,47 +4,46 @@
 
 <hibernate-mapping>
 
-    <class name="Chipboard" table="chipboard">
+    <class name="models.Chipboard" table="chipboard">
         <id name="id" type="int">
             <column name="id"/>
-            <generator class="native"/>
+            <generator class="identity"/>
         </id>
-        <property name = "id" column = "id" type = "int"/>
         <property name = "sizeId" column = "sizeId" type = "int"/>
         <property name = "cost" column = "cost" type = "double"/>
     </class>
 
-    <class name="ChipboardSize" table="chipboard_size">
+    <class name="models.ChipboardSize" table="chipboard_size">
         <id name="id" type="int">
             <column name="id"/>
-            <generator class="native"/>
+            <generator class="identity"/>
         </id>
         <property name = "length" column = "length" type = "int"/>
         <property name = "width" column = "width" type = "int"/>
         <property name = "thicknes" column = "thicknes" type = "int"/>
     </class>
 
-    <class name="Customer" table="customers">
+    <class name="models.Customer" table="customers">
         <id name="id" type="int">
             <column name="id"/>
-            <generator class="native"/>
+            <generator class="identity"/>
         </id>
         <property name = "nip" column = "NIP" type = "int"/>
-        <property name = "name" column = "name" type = "String"/>
+        <property name = "name" column = "name" type = "string"/>
         <property name = "discount" column = "discount" type = "double"/>
     </class>
 
-    <class name="Income" table="income">
+    <class name="models.Income" table="income">
         <id name="operationId" type="int">
             <column name="operationId"/>
-            <generator class="native"/>
+            <generator class="identity"/>
         </id>
         <property name = "operation_value" column = "operation_value" type = "double"/>
         <property name = "orderId" column = "orderId" type = "int"/>
         <property name = "date" column = "operation_date" type = "java.sql.Timestamp"/>
     </class>
 
-    <class name="OrderItem" table="order_item">
+    <class name="models.OrderItem" table="order_item">
         <composite-id>
             <key-property name="chipboardId" column="chipboardId"/>
             <key-property name="orderId" column="orderId"/>
@@ -52,21 +51,31 @@
         <property name = "quantity" column = "quantity" type = "int"/>
     </class>
 
-    <class name="Order" table="orders">
+    <class name="models.Order" table="orders">
         <id name="id" type="int">
             <column name="id"/>
-            <generator class="native"/>
+            <generator class="identity"/>
         </id>
         <property name = "customerId" column = "customerId" type = "int"/>
-        <property name="paymentStatus" column="paymentStatus" type="org.hibernate.type.EnumType" />
-        <property name="orderStatus" column="orderStatus" type="org.hibernate.type.EnumType" />
+        <property name="paymentStatus" column="paymentStatus">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">models.enums.PaymentStatus</param>
+                <param name="type">12</param>
+            </type>
+        </property>
+        <property name="orderStatus" column="orderStatus">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">models.enums.OrderStatus</param>
+                <param name="type">12</param>
+            </type>
+        </property>
     </class>
 
-    <class name="Warehouse" table="warehouse">
-        <id name="chipboardId" type="int">
-            <column name="chipboardId"/>
-            <generator class="foreign"/>
-        </id>
+    <class name="models.Warehouse" table="warehouse">
+        <composite-id>
+            <key-property name="chipboardId" column="chipboardId"/>
+        </composite-id>
+
         <property name = "quantity" column = "quantity" type = "int"/>
     </class>
 

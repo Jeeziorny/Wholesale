@@ -1,10 +1,12 @@
+package models;
+
 public class Customer {
   private int id;
   private int nip;
-  private int name;
+  private String name;
   private double discount;
 
-  public Customer(int id, int nip, int name, double discount) {
+  public Customer(int id, int nip, String name, double discount) {
     this.id = id;
     this.nip = nip;
     this.name = name;
@@ -30,11 +32,11 @@ public class Customer {
     this.nip = nip;
   }
 
-  public int getName() {
+  public String getName() {
     return name;
   }
 
-  public void setName(int name) {
+  public void setName(String name) {
     this.name = name;
   }
 
