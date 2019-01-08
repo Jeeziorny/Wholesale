@@ -1,43 +1,32 @@
 package Database;
 
-import models.Order;
 import models.enums.TableName;
+import org.hibernate.query.Query;
 
-import java.util.List;
-
-public class WarehousemanDBHandler implements DBHandler {
+public class WarehousemanDBHandler implements Crudeable {
   final private DaoOrder daoOrder;
   final private DaoOrderItem daoOrderItem;
 
-  public Object insert(Object object) {
+  public Object insert(TableName name, Object object) {
     return null;
   }
 
-  public Object delete(Object object) {
+  public Object delete(TableName name, Query query) {
     return null;
   }
 
-  public Object update(Object oldRow, Object newRow) {
-    if (oldRow instanceof Order && newRow instanceof Order) {
-      DaoOrder.update(newRow);
-    }
-    return null;
-  }
-
-  public Object selectAll(TableName name) {
+  public Object update(TableName name, Query query) {
     if (name.equals(TableName.ORDERS)) {
-      return DaoOrder.getAll();
-    } else if (name.equals(TableName.ORDER_ITEM)) {
-      return DaoOrderItem.getAll();
+      return daoOrder.update(query);
     }
     return null;
   }
 
-  public Object restrictSelect(List<String> colNames, TableName name, String where) {
-    if (name.equals(TableName.ORDER_ITEM)) {
-      return DaoOrderItem.get(colNames, where);
-    } else if (name.equals(TableName.ORDERS)) {
-      return DaoOrder.get(colNames, where);
+  public Object select(TableName name, Query query) {
+    if (name.equals(TableName.ORDERS)) {
+      return daoOrder.select(query);
+    } else if (name.equals(TableName.ORDER_ITEM)) {
+      return daoOrderItem.select(query);
     }
     return null;
   }

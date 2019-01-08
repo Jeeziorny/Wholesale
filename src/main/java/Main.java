@@ -1,3 +1,4 @@
+import Database.HibernateUtil;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.hibernate.Session;
