@@ -48,42 +48,52 @@ public class DaoCustomers implements DaoCustomerInterface {
     session.getTransaction().commit();
   }
 
-  public int update(String q, Object object, int id) {
+  public int update(String q, String name, int id) {
     Session session = HibernateUtil.getSessionFactory().openSession();
     Query query = null;
-    if (q.equals(updateNipById)) {
-      query = session.createQuery(updateNipById);
-      query.setParameter("nip", object);
-      query.setParameter("id", id);
-    } else if (q.equals(updateNameById)) {
-      query = session.createQuery(updateNameById);
-      query.setParameter("name", object);
-      query.setParameter("id", id);
-    }
     int result = -1;
-    try {
+    if (q.equals(updateNameById)) {
+      query = session.createQuery(updateNameById);
+      query.setParameter("name", name);
+      query.setParameter("id", id);
       result = query.executeUpdate();
-    } catch (NullPointerException e) {
-      e.printStackTrace();
     }
     session.getTransaction().commit();
     return result;
   }
 
-  public List select(String q, Object object) {
+  public int update(String q, int nip, int id) {
+    Session session = HibernateUtil.getSessionFactory().openSession();
+    Query query = null;
+    int result = -1;
+    if (q.equals(updateNipById)) {
+      query = session.createQuery(updateNipById);
+      query.setParameter("nip", nip);
+      query.setParameter("id", id);
+      result = query.executeUpdate();
+    }
+    session.getTransaction().commit();
+    return result;
+  }
+
+  public List select(String q, int id) {
     Session session = HibernateUtil.getSessionFactory().openSession();
     Query query = null;
     if (q.equals(selectById)) {
       query = session.createQuery(selectById);
-      query.setParameter("id", object);
-    } else if (q.equals(selectByName)) {
-      query = session.createQuery(selectByName);
-      query.setParameter("name", object);
-    }
-    try {
+      query.setParameter("id", id);
       return query.list();
-    } catch (NullPointerException e) {
-      e.printStackTrace();
+    }
+    return null;
+  }
+
+  public List select(String q, String name) {
+    Session session = HibernateUtil.getSessionFactory().openSession();
+    Query query = null;
+    if (q.equals(selectByName)) {
+      query = session.createQuery(selectByName);
+      query.setParameter("name", name);
+      return query.list();
     }
     return null;
   }

@@ -10,9 +10,6 @@ import java.util.List;
 public class DaoOrderItem implements DaoOrderItemIntreface {
   private volatile static DaoOrderItem instance;
 
-  public final String selectByOrderId = "FROM OrderItem O " +
-                                        "WHERE orderId = :orderId";
-
   private DaoOrderItem() {}
 
   public static DaoOrderItem getInstance() {

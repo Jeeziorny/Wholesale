@@ -133,6 +133,15 @@ public class WholesaleInsertTest {
     session.save(warehouse);
     newResult = query.list();
     assertEquals((Long) oldResult.get(0) + 1, newResult.get(0));
+
+    //updating
+    Query query3 = session.createQuery("UPDATE Order" +
+                                      " SET orderStatus = :status" +
+                                      " WHERE id = :id");
+    query3.setParameter("status", OrderStatus.DONE);
+    query3.setParameter("id", 2);
+    query3.executeUpdate();
+
   }
 
   @After

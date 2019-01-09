@@ -1,13 +1,13 @@
 package Database.DataAccessObject;
 
-import Database.DaoInterface.DaoChipboardsizeInterface;
+import Database.DaoInterface.DaoChipboardInterface;
 import Database.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 import java.util.List;
 
-public class DaoChipboard implements DaoChipboardsizeInterface {
+public class DaoChipboard implements DaoChipboardInterface {
   private volatile static DaoChipboard instance;
 
   public final String selectById = "FROM Chipboard " +

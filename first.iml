@@ -4,10 +4,10 @@
     <facet type="hibernate" name="Hibernate">
       <configuration>
         <datasource-map>
-          <unit-entry name="ceo.cfg.xml" value="4347a017-a2d6-4c4f-93d7-1835af42ac56" />
+          <unit-entry name="ceo.cfg.xml" />
           <unit-entry name="hibernate.cfg.xml" value="d1606d39-13c2-4e8c-9360-82e546b590c3" />
-          <unit-entry name="office.cfg.xml" value="32be5c77-8131-46f0-808a-a6d5d4fd1b4a" />
-          <unit-entry name="warehouseman.cfg.xml" value="75b65944-5cc1-46ad-b0a3-9ca27b72bf11" />
+          <unit-entry name="office.cfg.xml" />
+          <unit-entry name="warehouseman.cfg.xml" value="b72c6035-61db-4cf9-8a6d-3e7f8c7fb7bd" />
         </datasource-map>
         <naming-strategy-map />
         <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/src/main/resources/ceo.cfg.xml" />

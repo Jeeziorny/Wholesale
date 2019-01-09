@@ -1,15 +1,21 @@
 package Database;
 
+import Gui.Warehouse.WarehouseGui;
+import models.Warehouse;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 public class HibernateUtil {
+  private static SessionFactory sessionFactory;
 
-  private static final SessionFactory sessionFactory = buildSessionFactory();
+  public static void build(String resource) {
+    sessionFactory = buildSessionFactory(resource);
+    WarehouseGui warehouseGui = new WarehouseGui();
+  }
 
-  private static SessionFactory buildSessionFactory() {
+  private static SessionFactory buildSessionFactory(String resource) {
     try {
-      return new Configuration().addResource("hibernate.cfg.xml").configure().buildSessionFactory();
+      return new Configuration().addResource(resource).configure().buildSessionFactory();
     }
     catch (Throwable ex) {
       System.err.println("Initial SessionFactory creation failed." + ex);
