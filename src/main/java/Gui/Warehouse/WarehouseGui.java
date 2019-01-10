@@ -23,6 +23,7 @@ import models.OrderItem;
 import models.enums.OrderStatus;
 
 public class WarehouseGui {
+  private static WarehouseGui instance;
   private DaoOrderInterface daoOrder = DaoOrder.getInstance();
   private DaoOrderItemIntreface daoOrderItem = DaoOrderItem.getInstance();
 
@@ -44,7 +45,18 @@ public class WarehouseGui {
 
   private OrderStatus state;
 
-  public WarehouseGui() {
+  public static WarehouseGui getInstance() {
+    if (instance == null) {
+      instance = new WarehouseGui();
+    }
+    return instance;
+  }
+
+  public static void launch() {
+    instance.getStage().show();
+  }
+
+  private WarehouseGui() {
     setOrderTable();
     setOrderSpecificationTable();
     setButtons();
@@ -53,7 +65,10 @@ public class WarehouseGui {
     stage.setTitle("Wholesale: Warehousman");
     this.stage.setScene(new Scene(hBox));
     setState(OrderStatus.PENDING);
-    this.stage.show();
+  }
+
+  private Stage getStage() {
+    return this.stage;
   }
 
   private void setLayout() {

@@ -1,13 +1,13 @@
 package models.enums;
 
-public enum User {
-  WAREHOUSEMAN("Warehouseman"),
+public enum UserEnum {
+  WAREHOUSEMAN("UserInterface"),
   OFFICE("Office"),
   CEO("Ceo");
 
   private final String text;
 
-  User(final String name) {
+  UserEnum(final String name) {
     this.text = name;
   }
 

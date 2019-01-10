@@ -1,50 +1,80 @@
 import Database.HibernateUtil;
-import Gui.Warehouse.WarehouseGui;
+import WholesaleException.IncorrectUserDataException;
 import javafx.application.Application;
-import javafx.scene.control.ChoiceDialog;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import models.enums.User;
+import javafx.util.Pair;
+import models.User.User;
+import models.enums.UserEnum;
+import org.hibernate.Hibernate;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public class Main extends Application {
-  User user;
+
   public static void main(String[] args) {
     launch(args);
   }
 
   @Override
   public void start(Stage primaryStage) throws Exception {
-    getUser();
-  }
+    Dialog<Pair<String, String>> dialog = new Dialog<>();
+    dialog.setTitle("Login Dialog");
+    dialog.setHeaderText("Login to the system");
 
-  private void getUser() {
-    List<String> choices = new ArrayList<String>();
-    choices.add("Warehouse");
-    choices.add("Office");
-    choices.add("CEO");
+    ButtonType loginButtonType = new ButtonType("Login", ButtonBar.ButtonData.OK_DONE);
+    dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
 
-    ChoiceDialog<String> dialog = new ChoiceDialog<String>("Warehouse", choices);
-    dialog.setTitle("Wholesale app");
-    dialog.setHeaderText("Hello, please choose user");
-    dialog.setContentText("User");
+    GridPane grid = new GridPane();
+    grid.setHgap(10);
+    grid.setVgap(10);
+    grid.setPadding(new Insets(20, 150, 10, 10));
 
-    Optional<String> result = dialog.showAndWait();
-    result.ifPresent(name -> setUser(name));
-  }
+    TextField username = new TextField();
+    username.setPromptText("Username");
+    PasswordField password = new PasswordField();
+    password.setPromptText("Password");
 
-  private void setUser(final String name) {
-    if (name.equals("Warehouse")) {
-      HibernateUtil.build("warehouseman.cfg.xml");
-    }
-//    } else if (name.equals("Office")) {
-//      this.user = User.OFFICE;
-//      OfficeGui.launch();
-//    } else if (name.equals("CEO")) {
-//      this.user = User.CEO;
-//      CeoGui.launch();
-//    }
+    grid.add(new Label("Username:"), 0, 1);
+    grid.add(username, 1, 1);
+    grid.add(new Label("Password:"), 0, 2);
+
+    Node loginButton = dialog.getDialogPane().lookupButton(loginButtonType);
+    loginButton.setDisable(true);
+
+    grid.add(password, 1, 2);
+
+    username.textProperty().addListener((observable, oldValue, newValue) -> {
+      loginButton.setDisable(newValue.trim().isEmpty());
+    });
+
+    dialog.getDialogPane().setContent(grid);
+
+    Platform.runLater(() -> username.requestFocus());
+
+    dialog.setResultConverter(dialogButton -> {
+      if (dialogButton == loginButtonType) {
+        return new Pair<>(username.getText(), password.getText());
+      }
+      return null;
+    });
+
+    Optional<Pair<String, String>> result = dialog.showAndWait();
+
+    result.ifPresent(usernamePassword -> {
+      User user = new User(usernamePassword.getValue(), usernamePassword.getKey());
+      try {
+        HibernateUtil.build(user);
+      } catch (IncorrectUserDataException e) {
+        grid.add(new Label("Incorrect login details"), 0, 0);
+        username.clear();
+        password.clear();
+        dialog.showAndWait();
+      }
+    });
   }
 }
