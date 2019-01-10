@@ -20,8 +20,6 @@ public class DaoIncome implements DaoIncomeInterface {
   public final String selectByDate = "FROM Income " +
           "WHERE operation_date = :date";
 
-  //TODO: Insertowanie jest zadaniem bazy danych!
-
   private DaoIncome() {}
 
   public static DaoIncome getInstance() {

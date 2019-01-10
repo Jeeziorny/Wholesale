@@ -167,7 +167,6 @@ public class WarehouseGui {
       OrderSpecification.getItems().clear();
       setState(OrderStatus.PENDING);
     });
-    //TODO: zaktualizuj stan na magazynie!;
   }
 
   private void setState(OrderStatus mode) {

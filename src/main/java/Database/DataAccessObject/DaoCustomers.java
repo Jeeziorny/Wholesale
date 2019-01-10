@@ -18,7 +18,6 @@ public class DaoCustomers implements DaoCustomerInterface {
                                        "SET name = :name " +
                                        "WHERE id = :id";
 
-  //TODO: updatowanie kolumny discount to zadanie bazy danych!
 
   public final String selectByName = "FROM Customer " +
                                      "WHERE name LIKE :name";
@@ -27,7 +26,7 @@ public class DaoCustomers implements DaoCustomerInterface {
                                    "WHERE id = :id";
 
 
-
+  //TODO: po zmienia payment statusu zmien orderStatus w OFFICE!
   private DaoCustomers() {}
 
   public static DaoCustomers getInstance() {

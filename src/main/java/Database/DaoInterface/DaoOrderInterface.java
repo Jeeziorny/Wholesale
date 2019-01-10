@@ -14,15 +14,6 @@ public interface DaoOrderInterface {
   String selectByPaymentStatus = "FROM Order O " +
           "WHERE paymentStatus = :status";
 
-  /*TODO:
-    Przy updatowaniu statusu platnosci na
-    'DONE' wstaw rekord do Income - triggery nie dzialaja;
-   */
-
-  /*TODO:
-    Sprawdzaj, czy statusy sa dobrze zmieniane;
-   */
-
   void insert(Object object);
   int update(String q, Enum status, int id);
   List select(String q, Enum status);

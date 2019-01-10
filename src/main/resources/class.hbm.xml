@@ -60,13 +60,13 @@
         <property name="paymentStatus" column="paymentStatus">
             <type name="org.hibernate.type.EnumType">
                 <param name="enumClass">models.enums.PaymentStatus</param>
-                <param name="type">12</param>
+                <param name="useNamed">true</param>
             </type>
         </property>
         <property name="orderStatus" column="orderStatus">
             <type name="org.hibernate.type.EnumType">
                 <param name="enumClass">models.enums.OrderStatus</param>
-                <param name="type">12</param>
+                <param name="useNamed">true</param>
             </type>
         </property>
     </class>
