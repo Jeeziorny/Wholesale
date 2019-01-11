@@ -97,6 +97,8 @@ public class OfficeGui implements InvalidationListener {
         if (newSelection != null) {
           this.currentCustomer = (Customer) newSelection;
           this.newOrder.setDisable(false);
+          this.payment.setDisable(false);
+          this.editCustomer.setDisable(false);
           setLabel("Current Customer:\nId: "+currentCustomer.getId());
         }
       });
@@ -115,12 +117,15 @@ public class OfficeGui implements InvalidationListener {
     private void setButtons() {
       this.newOrder = new Button("New Order");
       this.newOrder.setPrefWidth(105);
+      this.newOrder.setDisable(true);
       this.newCustomer = new Button("New Customer");
       this.newCustomer.setPrefWidth(105);
       this.editCustomer = new Button("Edit Customer");
       this.editCustomer.setPrefWidth(105);
-      this.payment = new Button("Payment");
+      this.editCustomer.setDisable(true);
+      this.payment = new Button("Orders..");
       this.payment.setPrefWidth(105);
+      this.payment.setDisable(true);
       this.label = new Label();
       activateButtons();
       VBox labelVBox = new VBox(this.label);
@@ -134,18 +139,21 @@ public class OfficeGui implements InvalidationListener {
     private void activateButtons() {
       this.newOrder.setOnMousePressed(e -> {
         OrderCreationGui gui = new OrderCreationGui(currentCustomer);
+        gui.launch();
         gui.addListener(this);
       });
       this.newCustomer.setOnMousePressed(e -> {
-//        OrderCreationGui.getInstance().start(null);
-//        OrderCreationGui.getInstance().addListener(this);
-//        OrderCreationGui.getInstance().removeListener(this);
+
       });
-      this.editCustomer.setOnMousePressed(e -> customerUpdate());
+      this.editCustomer.setOnMousePressed(e -> {
+        customerEditGui gui = new customerEditGui(currentCustomer);
+        gui.launch();
+        gui.addListener(this);
+      });
       this.payment.setOnMousePressed(e -> {
-        PaymentGui.getInstance().start();
-        PaymentGui.getInstance().addListener(this);
-        PaymentGui.getInstance().removeListener(this);
+        PaymentGui gui = new PaymentGui(currentCustomer);
+        gui.launch();
+        gui.addListener(this);
       });
     }
 
@@ -155,8 +163,11 @@ public class OfficeGui implements InvalidationListener {
 
   @Override
   public void invalidated(Observable observable) {
+    System.out.println("Elo");
     updateCustomerTable();
     currentCustomer = null;
     newOrder.setDisable(true);
+    payment.setDisable(true);
+    editCustomer.setDisable(true);
   }
 }

@@ -81,10 +81,10 @@ public class DaoOrder implements DaoOrderInterface {
     return null;
   }
 
-  public List select(int orderId) {
+  public List select(int customerId) {
     Session session = HibernateUtil.getSessionFactory().openSession();
-    Query query = session.createQuery("FROM Order O WHERE id = :id");
-    query.setParameter("id", orderId);
+    Query query = session.createQuery("FROM Order O WHERE customerId = :id");
+    query.setParameter("id", customerId);
     return query.list();
   }
 

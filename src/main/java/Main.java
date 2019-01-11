@@ -1,4 +1,5 @@
 import Database.HibernateUtil;
+import Gui.Office.OrderCreationGui;
 import WholesaleException.IncorrectUserDataException;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -8,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import models.Customer;
 import models.User.User;
 import models.enums.UserEnum;
 import org.hibernate.Hibernate;

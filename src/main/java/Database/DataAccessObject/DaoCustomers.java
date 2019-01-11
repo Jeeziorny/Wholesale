@@ -10,22 +10,6 @@ import java.util.List;
 public class DaoCustomers implements DaoCustomerInterface {
   private volatile static DaoCustomers instance;
 
-  public final String updateNipById = "UPDATE Customer " +
-                                      "SET nip = :nip " +
-                                      "WHERE id = :id";
-
-  public final String updateNameById = "UPDATE Customer " +
-                                       "SET name = :name " +
-                                       "WHERE id = :id";
-
-
-  public final String selectByName = "FROM Customer " +
-                                     "WHERE name LIKE :name";
-
-  public final String selectById = "FROM Customer " +
-                                   "WHERE id = :id";
-
-
   //TODO: po zmienia payment statusu zmien orderStatus w OFFICE!
   private DaoCustomers() {}
 

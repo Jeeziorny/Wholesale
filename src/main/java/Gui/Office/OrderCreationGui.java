@@ -9,13 +9,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import models.Chipboard;
@@ -52,53 +49,49 @@ public class OrderCreationGui implements Observable {
 
   public OrderCreationGui(Customer customer) {
     this.currentCustomer = customer;
+    setControls();
     setChipboardsTable();
     setOrderTable();
-    Platform.runLater(() -> setLayout());
-    setControls();
+    setLayout();
     this.stage = new Stage();
     stage.setTitle("Wholesale: Order constructor");
     this.stage.setScene(new Scene(hBox));
     this.stage.alwaysOnTopProperty();
-    this.stage.show();
     stage.setOnCloseRequest(e -> listener.invalidated(this));
+  }
+
+  public void launch() {
+    this.stage.show();
   }
 
   private void setLayout() {
     this.hBox.setPadding(new Insets(30));
     this.hBox.setSpacing(30);
-//    this.hBox.setAlignment(Pos.CENTER);
-//    this.hBox.setPrefWidth(748);
-//    this.hBox.setMinWidth(748);
-//    this.hBox.setPrefHeight(481);
-//    this.hBox.setMinHeight(481);
-    this.message.setPrefSize(332, 17);
+    this.hBox.setPrefWidth(400);
     HBox orderItemBox = new HBox(
             new Label("id: "), this.currentChipboardId,
             new Label("q: "), this.currentQuantity,
             this.addPosition);
     orderItemBox.setSpacing(10);
     orderItemBox.setAlignment(Pos.CENTER);
-    HBox.setHgrow(orderItemBox, Priority.ALWAYS);
-    VBox rightPanel = new VBox(this.message, orderItemBox, this.orderTable, this.addOrder);
+    VBox rightPanel = new VBox(new HBox(this.message), orderItemBox, this.orderTable, this.addOrder);
     rightPanel.setSpacing(10);
     rightPanel.setAlignment(Pos.CENTER);
-    rightPanel.setPrefWidth(351);
-    HBox.setHgrow(rightPanel, Priority.ALWAYS);
+    rightPanel.setMinWidth(440);
+    this.Chipboards.setMinWidth(200);
     hBox.getChildren().addAll(this.Chipboards, rightPanel);
   }
 
-  public void setControls() {
+  private void setControls() {
     this.currentChipboardId = new TextField();
     this.currentChipboardId.setPromptText("id");
     this.currentQuantity = new TextField();
     this.currentQuantity.setPromptText("quantity");
     this.addPosition = new Button("Add");
     this.addPosition.setOnMousePressed(e -> addOrderItem());
-    this.addOrder = new Button("Make orderTable");
+    this.addOrder = new Button("New Order");
     this.addOrder.setOnMousePressed(e -> addNewOrder());
     this.message = new Label();
-
   }
 
   private void addNewOrder() {
