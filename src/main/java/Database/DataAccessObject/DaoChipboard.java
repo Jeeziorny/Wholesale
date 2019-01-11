@@ -10,12 +10,6 @@ import java.util.List;
 public class DaoChipboard implements DaoChipboardInterface {
   private volatile static DaoChipboard instance;
 
-  public final String selectById = "FROM Chipboard " +
-                                   "WHERE id = :id";
-
-  public final String selectBySizeId = "FROM Chipboard " +
-                                       "WHERE sizeId = :sizeId";
-
   private DaoChipboard() {}
 
   public static DaoChipboard getInstance() {
@@ -52,5 +46,12 @@ public class DaoChipboard implements DaoChipboardInterface {
       e.printStackTrace();
     }
     return null;
+  }
+
+  @Override
+  public List select() {
+    Session session = HibernateUtil.getSessionFactory().openSession();
+    Query query = session.createQuery("FROM Chipboard ");
+    return query.list();
   }
 }

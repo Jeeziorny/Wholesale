@@ -1,11 +1,17 @@
 package models;
 
+import Database.DaoInterface.DaoChipboardInterface;
+import Database.DataAccessObject.DaoChipboard;
+
 import java.io.Serializable;
+import java.util.List;
 
 public class OrderItem implements Serializable {
   private int chipboardId;
   private int quantity;
   private int orderId;
+  private int price;
+  private Customer owner;
 
   public OrderItem(int chipboardId, int quantity, int orderId) {
     this.chipboardId = chipboardId;
@@ -38,5 +44,18 @@ public class OrderItem implements Serializable {
 
   public void setOrderId(int orderId) {
     this.orderId = orderId;
+  }
+
+  public double getPrice() {
+    DaoChipboardInterface daoChipboard = DaoChipboard.getInstance();
+    List<Chipboard> result = ((DaoChipboard) daoChipboard)
+            .select(DaoChipboardInterface.priceOfId, getChipboardId());
+    return ((Chipboard) result.get(0)).getCost()
+            *this.quantity
+            *(1-this.owner.getDiscount());
+  }
+
+  public void setOwner(Customer customer) {
+    this.owner = customer;
   }
 }

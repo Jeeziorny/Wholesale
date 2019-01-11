@@ -13,7 +13,7 @@ public class HibernateUtil {
 
   public static void build(UserInterface user) throws IncorrectUserDataException {
     sessionFactory = buildSessionFactory(user);
-    WarehouseGui.getInstance().launch();
+    user.launchGui();
   }
 
   private static SessionFactory buildSessionFactory(UserInterface user) throws IncorrectUserDataException {

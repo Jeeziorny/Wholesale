@@ -179,7 +179,7 @@ GRANT SELECT, INSERT, UPDATE
 	ON wholesale.customers
     TO 'office'@'localhost';
     
-GRANT SELECT
+GRANT SELECT, INSERT
 	ON wholesale.order_item
     TO 'office'@'localhost';
     

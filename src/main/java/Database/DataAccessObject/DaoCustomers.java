@@ -96,4 +96,11 @@ public class DaoCustomers implements DaoCustomerInterface {
     }
     return null;
   }
+
+  public List select() {
+    Session session = HibernateUtil.getSessionFactory().openSession();
+    Query query = null;
+    query = session.createQuery("FROM Customer ");
+    return query.list();
+  }
 }

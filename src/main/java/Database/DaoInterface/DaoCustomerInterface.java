@@ -8,4 +8,5 @@ public interface DaoCustomerInterface {
   int update(String q, int nip, int id);
   List select(String q, int id);
   List select(String q, String name);
+  List select();
 }

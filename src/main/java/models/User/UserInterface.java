@@ -6,4 +6,5 @@ public interface UserInterface {
   String getDriverClass();
   String getConnectionUrl();
   String getDialect();
+  void launchGui();
 }
