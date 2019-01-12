@@ -26,7 +26,6 @@ public class OfficeGui implements InvalidationListener {
 
     private DaoCustomerInterface daoCustomer = DaoCustomers.getInstance();
 
-    private Parent root;
     private Stage stage;
 
     private HBox hBox = new HBox();
@@ -143,10 +142,12 @@ public class OfficeGui implements InvalidationListener {
         gui.addListener(this);
       });
       this.newCustomer.setOnMousePressed(e -> {
-
+        CustomerEditGui gui = new CustomerEditGui(null);
+        gui.launch();
+        gui.addListener(this);
       });
       this.editCustomer.setOnMousePressed(e -> {
-        customerEditGui gui = new customerEditGui(currentCustomer);
+        CustomerEditGui gui = new CustomerEditGui(currentCustomer);
         gui.launch();
         gui.addListener(this);
       });
@@ -157,13 +158,8 @@ public class OfficeGui implements InvalidationListener {
       });
     }
 
-    private void customerUpdate() {
-
-    }
-
   @Override
   public void invalidated(Observable observable) {
-    System.out.println("Elo");
     updateCustomerTable();
     currentCustomer = null;
     newOrder.setDisable(true);

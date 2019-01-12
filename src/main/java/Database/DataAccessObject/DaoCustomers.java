@@ -3,14 +3,14 @@ package Database.DataAccessObject;
 import Database.DaoInterface.DaoCustomerInterface;
 import Database.HibernateUtil;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 public class DaoCustomers implements DaoCustomerInterface {
   private volatile static DaoCustomers instance;
-
-  //TODO: po zmienia payment statusu zmien orderStatus w OFFICE!
   private DaoCustomers() {}
 
   public static DaoCustomers getInstance() {
@@ -33,29 +33,51 @@ public class DaoCustomers implements DaoCustomerInterface {
 
   public int update(String q, String name, int id) {
     Session session = HibernateUtil.getSessionFactory().openSession();
-    Query query = null;
     int result = -1;
-    if (q.equals(updateNameById)) {
-      query = session.createQuery(updateNameById);
-      query.setParameter("name", name);
-      query.setParameter("id", id);
-      result = query.executeUpdate();
+    Transaction tx = null;
+    try {
+      tx = session.beginTransaction();
+      if (q.equals(updateNameById)) {
+        Query query = session.createQuery(updateNameById);
+        query.setParameter("name", name);
+        query.setParameter("id", id);
+        result = query.executeUpdate();
+      }
+      tx.commit();
+    } catch (RuntimeException e) {
+      if (tx != null) {
+        tx.rollback();
+        e.printStackTrace();
+      }
     }
-    session.getTransaction().commit();
+    finally {
+      session.close();
+    }
     return result;
   }
 
   public int update(String q, int nip, int id) {
     Session session = HibernateUtil.getSessionFactory().openSession();
-    Query query = null;
     int result = -1;
-    if (q.equals(updateNipById)) {
-      query = session.createQuery(updateNipById);
-      query.setParameter("nip", nip);
-      query.setParameter("id", id);
-      result = query.executeUpdate();
+    Transaction tx = null;
+    try {
+      tx = session.beginTransaction();
+      if (q.equals(updateNipById)) {
+        Query query = session.createQuery(updateNipById);
+        query.setParameter("nip", nip);
+        query.setParameter("id", id);
+        result = query.executeUpdate();
+      }
+      tx.commit();
+    } catch (RuntimeException e) {
+      if (tx != null) {
+        tx.rollback();
+        e.printStackTrace();
+      }
     }
-    session.getTransaction().commit();
+    finally {
+      session.close();
+    }
     return result;
   }
 

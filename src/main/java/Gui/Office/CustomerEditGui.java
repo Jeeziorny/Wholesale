@@ -4,6 +4,7 @@ import Database.DaoInterface.DaoCustomerInterface;
 import Database.DataAccessObject.DaoCustomers;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -26,57 +27,95 @@ public class CustomerEditGui implements Observable {
   private Button confirmButton;
   private TextField nameField;
   private TextField nipField;
+  private Label message;
 
   public CustomerEditGui(Customer customer) {
     this.currentCustomer = customer;
+    if (this.currentCustomer == null) {
+      this.currentCustomer = new Customer();
+      this.currentCustomer.setDiscount(0);
+      this.currentCustomer.setName("");
+      this.currentCustomer.setNip(0);
+    }
     setControls();
     setLayout();
     this.stage = new Stage();
-    stage.setTitle("Wholesale: Edit a customer");
+    this.stage.setTitle("Wholesale: Edit a customer");
     this.stage.setScene(new Scene(vBox));
     this.stage.setOnCloseRequest(e -> listener.invalidated(this));
   }
 
+  public void launch() {
+    this.stage.show();
+  }
+
   private void setControls() {
-    nipField = new TextField();
-    nipField.setText(currentCustomer.getNip()+" ");
-    nameField = new TextField();
-    nameField.setText(currentCustomer.getName());
-    confirmButton = new Button("OK");
-    confirmButton.setPrefWidth(80);
-    confirmButton.setOnMousePressed(e -> {
-      try {
-        Integer.parseInt(nipField.getText());
-        daoCustomer.update(daoCustomer.updateNipById,
-                Integer.parseInt(nipField.getText()),
-                currentCustomer.getId());
-        daoCustomer.update(daoCustomer.updateNameById,
-                nameField.getText(),
-                currentCustomer.getId());
-      } catch (NumberFormatException f) {
-        setLog("Incorrect nip");
+    this.message = new Label("Enter data");
+    this.nipField = new TextField();
+    this.nipField.setText(currentCustomer.getNip()+"");
+    this.nameField = new TextField();
+    this.nameField.setText(currentCustomer.getName());
+    this.confirmButton = new Button("OK");
+    this.confirmButton.setPrefWidth(80);
+    this.confirmButton.setOnMousePressed(e -> {
+      if (currentCustomer.getName().equals("")) {
+        insertCustomer();
+      } else {
+        updateCustomer();
       }
+      listener.invalidated(this);
+      this.stage.close();
     });
   }
 
+  private void updateCustomer() {
+    try {
+      Integer.parseInt(this.nipField.getText());
+      this.daoCustomer.update(daoCustomer.updateNipById,
+              Integer.parseInt(this.nipField.getText()),
+              this.currentCustomer.getId());
+      this.daoCustomer.update(daoCustomer.updateNameById,
+              this.nameField.getText(),
+              this.currentCustomer.getId());
+    } catch (NumberFormatException f) {
+      setLog("Incorrect nip");
+    }
+  }
+
+  private void insertCustomer() {
+    try {
+      int nip = Integer.parseInt(this.nipField.getText());
+      currentCustomer.setNip(nip);
+      currentCustomer.setName(nameField.getText());
+      this.daoCustomer.insert(currentCustomer);
+    } catch (NumberFormatException e) {
+      setLog("Incorrect nip");
+    }
+  }
+
   private void setLog(String arg) {
-    //TODO:
-    /*
-    Skonczyles tu. Wystarczy, ze wypelnisz ta funkcje i ustawisz layout.
-    Trzeba jeszcze powiadomic listenera o UPDATE i o zamknieciu okna.
-     */
+    this.message.setText(arg);
   }
 
   private void setLayout() {
+    this.vBox.setPadding(new Insets(30));
+    this.vBox.setSpacing(10);
     Label description = new Label(
             "Customer id: "+currentCustomer.getId() +
                     "\nCustomer NIP: "+currentCustomer.getNip() +
                     "\nCustomer name: "+currentCustomer.getName() +
-                    "\nCustomer discount: "+currentCustomer.getName());
-    HBox nameBox = new HBox(new Label("New name: "), this.nameField);
-    HBox nipBox = new HBox(new Label("New nip: ", this.nipField));
+                    "\nCustomer discount: "+currentCustomer.getDiscount());
+    Label newName = new Label("New name: ");
+    newName.setPrefWidth(100);
+    HBox nameBox = new HBox(newName);
+    nameBox.getChildren().add(this.nameField);
+    Label newNip = new Label("New nip: ");
+    newNip.setPrefWidth(100);
+    HBox nipBox = new HBox(newNip);
+    nipBox.getChildren().add(this.nipField);
     VBox buttonBox = new VBox(this.confirmButton);
     buttonBox.setAlignment(Pos.CENTER_RIGHT);
+    this.vBox.getChildren().addAll(description, this.message, nameBox, nipBox, buttonBox);
   }
 
   @Override
