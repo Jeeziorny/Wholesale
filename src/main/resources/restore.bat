@@ -1,0 +1,1 @@
+mysql -uroot -p1234 wholesale < C:\Users\Lenovo\Desktop\BD\%1

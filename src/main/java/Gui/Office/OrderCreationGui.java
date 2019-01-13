@@ -62,6 +62,7 @@ public class OrderCreationGui implements Observable {
 
   public void launch() {
     this.stage.show();
+    this.stage.setResizable(false);
   }
 
   private void setLayout() {
@@ -96,23 +97,23 @@ public class OrderCreationGui implements Observable {
 
   private void addNewOrder() {
     Order order = new Order();
-    order.setCustomerId(currentCustomer.getId());
+    order.setCustomerId(this.currentCustomer.getId());
     order.setOrderStatus(OrderStatus.SUSPENDED);
     order.setPaymentStatus(PaymentStatus.PENDING);
-    daoOrder.insert(order);
+    this.daoOrder.insert(order);
 
     for (Object o : orderTable.getItems()) {
       OrderItem item = (OrderItem) o;
       item.setOrderId(order.getId());
-      daoOrderItem.insert(item);
+      this.daoOrderItem.insert(item);
     }
-    stage.close();
-    listener.invalidated(this);
+    this.stage.close();
+    this.listener.invalidated(this);
   }
 
   private void setOrderTable() {
-    orderTable = new TableView();
-    orderTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    this.orderTable = new TableView();
+    this.orderTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
     TableColumn idCol = new TableColumn("Id");
     TableColumn quantityCol = new TableColumn("Quantity");
@@ -122,7 +123,7 @@ public class OrderCreationGui implements Observable {
     quantityCol.setCellValueFactory(new PropertyValueFactory<OrderItem, Integer>("quantity"));
     priceCol.setCellValueFactory(new PropertyValueFactory<OrderItem, Double>("price"));
 
-    orderTable.getColumns().setAll(idCol, quantityCol, priceCol);
+    this.orderTable.getColumns().setAll(idCol, quantityCol, priceCol);
   }
 
   private void addOrderItem() {
@@ -130,12 +131,12 @@ public class OrderCreationGui implements Observable {
     orderItemList.addAll(orderTable.getItems());
     OrderItem orderItem = new OrderItem();
     try {
-      orderItem.setQuantity(Integer.parseInt(currentQuantity.getText()));
-      orderItem.setChipboardId(Integer.parseInt(currentChipboardId.getText()));
-      orderItem.setOwner(currentCustomer);
+      orderItem.setQuantity(Integer.parseInt(this.currentQuantity.getText()));
+      orderItem.setChipboardId(Integer.parseInt(this.currentChipboardId.getText()));
+      orderItem.setOwner(this.currentCustomer);
       if (orderItem.getQuantity() > 0 && orderItem.getChipboardId() > 0) {
         orderItemList.add(orderItem);
-        orderTable.setItems(orderItemList);
+        this.orderTable.setItems(orderItemList);
       }
     } catch (NumberFormatException e) {
       this.message.setText("Incorrect data");
@@ -148,8 +149,8 @@ public class OrderCreationGui implements Observable {
   }
 
   private void setChipboardsTable() {
-    Chipboards = new TableView();
-    Chipboards.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    this.Chipboards = new TableView();
+    this.Chipboards.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
     TableColumn idCol = new TableColumn("Id");
     TableColumn costCol = new TableColumn("Cost");
@@ -159,8 +160,8 @@ public class OrderCreationGui implements Observable {
 
     updateChipboardsTable();
 
-    Chipboards.getColumns().setAll(idCol, costCol);
-    Chipboards.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+    this.Chipboards.getColumns().setAll(idCol, costCol);
+    this.Chipboards.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
       if (newSelection != null) {
         this.currentChipboard = (Chipboard) newSelection;
         updateTextFields();

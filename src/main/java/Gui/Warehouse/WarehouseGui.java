@@ -43,8 +43,6 @@ public class WarehouseGui {
 
   private Order currentOrder;
 
-  private OrderStatus state;
-
   public static WarehouseGui getInstance() {
     if (instance == null) {
       instance = new WarehouseGui();
@@ -62,8 +60,8 @@ public class WarehouseGui {
     setButtons();
     setLayout();
     this.stage = new Stage();
-    stage.setTitle("Wholesale: Warehousman");
-    this.stage.setScene(new Scene(hBox));
+    this.stage.setTitle("Wholesale: Warehousman");
+    this.stage.setScene(new Scene(this.hBox));
     setState(OrderStatus.PENDING);
   }
 
@@ -82,8 +80,8 @@ public class WarehouseGui {
   }
 
   private void setOrderTable() {
-    Orders = new TableView();
-    Orders.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    this.Orders = new TableView();
+    this.Orders.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
     TableColumn idCol = new TableColumn("Id");
     TableColumn customerIdCol = new TableColumn("Customer Id");
@@ -95,14 +93,14 @@ public class WarehouseGui {
 
     updateOrderTable();
 
-    Orders.getColumns().setAll(idCol, customerIdCol, OrderStatusCol);
-    Orders.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+    this.Orders.getColumns().setAll(idCol, customerIdCol, OrderStatusCol);
+    this.Orders.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
       if (newSelection != null) {
         this.currentOrder = (Order) newSelection;
         updateOrderSpecificationTable();
       }
     });
-    hBox.getChildren().add(Orders);
+    this.hBox.getChildren().add(Orders);
   }
 
   private void updateOrderTable() {
@@ -115,17 +113,17 @@ public class WarehouseGui {
   }
 
   private void setOrderSpecificationTable() {
-    OrderSpecification = new TableView();
-    OrderSpecification.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    this.OrderSpecification = new TableView();
+    this.OrderSpecification.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
     TableColumn chipboardIdCol = new TableColumn("Chipboard Id");
     TableColumn quantityCol = new TableColumn("Quantity");
 
     chipboardIdCol.setCellValueFactory(new PropertyValueFactory<OrderItem, Integer>("chipboardId"));
     quantityCol.setCellValueFactory(new PropertyValueFactory<OrderItem, Integer>("quantity"));
-    OrderSpecification.getColumns().setAll(chipboardIdCol, quantityCol);
+    this.OrderSpecification.getColumns().setAll(chipboardIdCol, quantityCol);
 
-    hBox.getChildren().add(OrderSpecification);
+    this.hBox.getChildren().add(OrderSpecification);
   }
 
   private void updateOrderSpecificationTable() {

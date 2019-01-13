@@ -5,8 +5,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
-import java.util.Arrays;
-
 public class CeoGui {
   private static CeoGui instance;
 
@@ -16,7 +14,7 @@ public class CeoGui {
   private IncomeTab incomeTab = new IncomeTab();
   private WarehouseTab warehouseTab = new WarehouseTab();
   private ChipboardTab chipboardTab = new ChipboardTab();
-  private OtherTab dataBaseTab = new OtherTab();
+  private SecurityTab dataBaseTab = new SecurityTab();
   private SizeTab sizeTab = new SizeTab();
 
   public static CeoGui getInstance() {
@@ -28,6 +26,7 @@ public class CeoGui {
 
   public static void launch() {
     instance.getStage().show();
+    instance.getStage().setResizable(false);
   }
 
   private CeoGui() {

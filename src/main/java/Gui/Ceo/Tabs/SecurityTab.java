@@ -1,6 +1,7 @@
 package Gui.Ceo.Tabs;
 
 import Database.DBSecurity;
+import Database.SecurityInterface;
 import Gui.Office.OfficeGui;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -11,8 +12,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class OtherTab extends Tab {
-  private DBSecurity handler = DBSecurity.getInstance();
+public class SecurityTab extends Tab {
+  private SecurityInterface handler = DBSecurity.getInstance();
 
   private Button backupButton = new Button("Backup");
   private Button restoreButton = new Button("Restore");
@@ -21,7 +22,9 @@ public class OtherTab extends Tab {
   private TextField backupField = new TextField();
   private TextField restoreField = new TextField();
 
-  public OtherTab() {
+  private Label message = new Label();
+
+  public SecurityTab() {
     super("Others");
     setLayout();
     officeButton.setOnMousePressed(e -> launchOffice());
@@ -31,7 +34,19 @@ public class OtherTab extends Tab {
   }
 
   private void restore() {
+    String name = this.restoreField.getText();
+    if (name.equals("")) {
+      setMessage("Incorrect file to restore");
+    } else {
+      if (handler.restore(name+".sql") != 0) {
+        setMessage("Restore incomplete. Check name of file");
+      }
+      restoreField.clear();
+    }
+  }
 
+  private void setMessage(String arg) {
+    this.message.setText(arg);
   }
 
   private void backup() {
@@ -76,7 +91,9 @@ public class OtherTab extends Tab {
     HBox oBox = new HBox();
     oBox.getChildren().addAll(empty, officeButton);
     oBox.setAlignment(Pos.CENTER);
-    vBox.getChildren().addAll(oBox, bBox, rBox);
+
+    this.message.setAlignment(Pos.CENTER_LEFT);
+    vBox.getChildren().addAll(this.message, oBox, bBox, rBox);
     this.setContent(vBox);
   }
 }

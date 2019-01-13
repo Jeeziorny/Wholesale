@@ -21,35 +21,35 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import models.Customer;
 import models.Order;
+import models.enums.OrderStatus;
 import models.enums.PaymentStatus;
 
 import java.util.List;
 
-public class PaymentGui implements Observable {
+public class OrdersGui implements Observable {
   InvalidationListener listener;
   private DaoOrderInterface daoOrder = DaoOrder.getInstance();
 
   private Stage stage;
 
   private Customer currentCustomer;
-
-  private HBox hBox = new HBox();
-
-  private Button payButton;
-
-  private TableView customerOrders;
-
   private Order currentOrder;
 
-  public PaymentGui(Customer customer) {
+  private HBox hBox = new HBox();
+  private Button payButton;
+  private TableView customerOrders;
+
+
+  public OrdersGui(Customer customer) {
     this.currentCustomer = customer;
     setCustomerOrdersTable();
     setButtons();
     setLayout();
     this.stage = new Stage();
-    stage.setTitle("Wholesale: Payment");
-    this.stage.setScene(new Scene(hBox));
-    this.stage.setOnCloseRequest(e -> listener.invalidated(this));
+    this.stage.setTitle("Wholesale: Payment");
+    this.stage.setScene(new Scene(this.hBox));
+    this.stage.setOnCloseRequest(e -> this.listener.invalidated(this));
+    this.stage.setResizable(false);
   }
 
   public void launch() {
@@ -59,7 +59,7 @@ public class PaymentGui implements Observable {
   private void setLayout() {
     this.hBox.setPadding(new Insets(30));
     this.hBox.setSpacing(30);
-    this.hBox.setPrefWidth(450);
+    this.hBox.setPrefWidth(500);
     VBox rightPanel = new VBox(this.payButton);
     rightPanel.setAlignment(Pos.CENTER);
     this.customerOrders.setMinWidth(200);
@@ -73,7 +73,7 @@ public class PaymentGui implements Observable {
   }
 
   private void Pay() {
-    daoOrder.update(daoOrder.updatePaymentStatusById,
+    this.daoOrder.update(daoOrder.updatePaymentStatusById,
             PaymentStatus.DONE,
             currentOrder.getId());
     updateCustomerOrdersTable();
@@ -86,16 +86,18 @@ public class PaymentGui implements Observable {
     this.customerOrders.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
     TableColumn idCol = new TableColumn("Id");
-    TableColumn statusCol = new TableColumn("Payment Status");
+    TableColumn paymentCol = new TableColumn("Payment Status");
     TableColumn priceCol = new TableColumn("Price");
+    TableColumn orderCol = new TableColumn("Order Status");
 
     idCol.setCellValueFactory(new PropertyValueFactory<Order, Integer>("id"));
-    statusCol.setCellValueFactory(new PropertyValueFactory<Order, PaymentStatus>("paymentStatus"));
+    paymentCol.setCellValueFactory(new PropertyValueFactory<Order, PaymentStatus>("paymentStatus"));
     priceCol.setCellValueFactory(new PropertyValueFactory<Order, Double>("price"));
+    orderCol.setCellValueFactory(new PropertyValueFactory<Order, OrderStatus>("orderStatus"));
 
     updateCustomerOrdersTable();
 
-    this.customerOrders.getColumns().setAll(idCol, statusCol, priceCol);
+    this.customerOrders.getColumns().setAll(idCol, paymentCol, priceCol, orderCol);
     this.customerOrders.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
       if (newSelection != null) {
         this.currentOrder = (Order) newSelection;
@@ -108,8 +110,8 @@ public class PaymentGui implements Observable {
 
   private void updateCustomerOrdersTable() {
     ObservableList<Order> orderList = FXCollections.observableArrayList();
-    List items = daoOrder
-            .select(currentCustomer.getId());
+    List items = this.daoOrder
+            .select(this.currentCustomer.getId());
     for (Object o : items) {
       Order obj = (Order) o;
       orderList.add(obj);

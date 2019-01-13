@@ -47,6 +47,7 @@ public class CustomerEditGui implements Observable {
 
   public void launch() {
     this.stage.show();
+    this.stage.setResizable(false);
   }
 
   private void setControls() {
@@ -85,9 +86,9 @@ public class CustomerEditGui implements Observable {
   private void insertCustomer() {
     try {
       int nip = Integer.parseInt(this.nipField.getText());
-      currentCustomer.setNip(nip);
-      currentCustomer.setName(nameField.getText());
-      this.daoCustomer.insert(currentCustomer);
+      this.currentCustomer.setNip(nip);
+      this.currentCustomer.setName(this.nameField.getText());
+      this.daoCustomer.insert(this.currentCustomer);
     } catch (NumberFormatException e) {
       setLog("Incorrect nip");
     }
@@ -101,10 +102,10 @@ public class CustomerEditGui implements Observable {
     this.vBox.setPadding(new Insets(30));
     this.vBox.setSpacing(10);
     Label description = new Label(
-            "Customer id: "+currentCustomer.getId() +
-                    "\nCustomer NIP: "+currentCustomer.getNip() +
-                    "\nCustomer name: "+currentCustomer.getName() +
-                    "\nCustomer discount: "+currentCustomer.getDiscount());
+            "Customer id: "+this.currentCustomer.getId() +
+                    "\nCustomer NIP: "+this.currentCustomer.getNip() +
+                    "\nCustomer name: "+this.currentCustomer.getName() +
+                    "\nCustomer discount: "+this.currentCustomer.getDiscount());
     Label newName = new Label("New name: ");
     newName.setPrefWidth(100);
     HBox nameBox = new HBox(newName);
