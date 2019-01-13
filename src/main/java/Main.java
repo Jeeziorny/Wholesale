@@ -1,4 +1,5 @@
 import Database.HibernateUtil;
+import Gui.Ceo.CeoGui;
 import Gui.Office.OrderCreationGui;
 import WholesaleException.IncorrectUserDataException;
 import javafx.application.Application;

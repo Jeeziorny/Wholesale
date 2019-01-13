@@ -7,4 +7,5 @@ public interface DaoIncomeInterface {
   List select(String q, int orderId);
   List select(String q, double value);
   List select(String q, Timestamp date);
+  List select();
 }

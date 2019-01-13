@@ -15,18 +15,18 @@ CREATE TABLE chipboard (
 	id		INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     sizeId	INT NOT NULL,
     cost	DOUBLE NOT NULL,
-    
+
     FOREIGN KEY (sizeId) REFERENCES chipboard_size(id)
 );
 
 CREATE TABLE warehouse (
 	chipboardId	INT NOT NULL,
     quantity	INT,
-    
+
     FOREIGN KEY (chipboardId) REFERENCES chipboard(id)
 );
 
-CREATE TABLE customers ( 
+CREATE TABLE customers (
 	id			INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     NIP			INT NOT NULL UNIQUE KEY,
     name		VARCHAR(45),
@@ -38,7 +38,7 @@ CREATE TABLE orders ( /* USUNALEM CHARGE */
     customerId		INT NOT NULL,
     paymentStatus	ENUM('DONE', 'PENDING'),
     orderStatus		ENUM('SUSPENDED', 'PENDING', 'DONE', 'LACK_OF_MATERIALS', 'CONSTRUCTION', 'ISSUED'),
-    
+
     FOREIGN KEY (customerId) REFERENCES customers(id)
 );
 
@@ -46,7 +46,7 @@ CREATE TABLE order_item (
 	chipboardId		INT NOT NULL,
     quantity		INT,
     orderId			INT NOT NULL,
-    
+
     FOREIGN KEY (chipboardId) REFERENCES chipboard(Id),
     FOREIGN KEY (orderId) REFERENCES orders(id) ON DELETE CASCADE
 );
@@ -56,7 +56,7 @@ CREATE TABLE income (
     operation_value	DOUBLE,
     orderId			INT NOT NULL,
     operation_date	DATETIME,
-    
+
     FOREIGN KEY (orderId) REFERENCES orders(id) ON DELETE CASCADE
 );
 
@@ -110,9 +110,10 @@ DELIMITER $$
 CREATE TRIGGER orders_after_update
 BEFORE UPDATE ON orders
 FOR EACH ROW
-BEGIN    
+BEGIN
+	DECLARE var INT DEFAULT 0;
 	IF (new.paymentStatus = 'DONE') THEN
-		SET @var :=(SELECT SUM(cost)*cust.discount
+		SET var :=(SELECT SUM(cost)*(1-cust.discount)
 					FROM order_item items
 					JOIN chipboard board
 						ON board.id = items.chipboardId
@@ -120,14 +121,14 @@ BEGIN
 						ON cust.id = old.customerId
 					WHERE items.orderId = old.id);
 		INSERT INTO income (operation_value, orderId, operation_date)
-        VALUE (@var, old.id, NOW());
-        
-                          
+        VALUE (var, old.id, NOW());
+
+
 		UPDATE customers
-		SET discount = discount + @var/10000
+		SET discount = discount + var/10000
 		WHERE id = old.customerId;
 	END IF;
-    
+
 	IF (new.orderStatus = 'ISSUED') THEN
 		CALL updateWarehouse(old.id);
 	END IF;
@@ -136,32 +137,32 @@ DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE updateWarehouse(IN id INT)
-BEGIN    
+BEGIN
 	DECLARE v_finished INTEGER DEFAULT 0;
     DECLARE tempId INTEGER DEFAULT 0;
     DECLARE tempQ INTEGER DEFAULT 0;
-    
-    DECLARE myCursor CURSOR FOR 
+
+    DECLARE myCursor CURSOR FOR
 	SELECT chipboardId, quantity
 	FROM order_item
 	WHERE orderId = id;
-    
-    DECLARE CONTINUE HANDLER 
+
+    DECLARE CONTINUE HANDLER
 	FOR NOT FOUND SET v_finished = 1;
-    
+
     OPEN myCursor;
-    
+
     substract: LOOP
 		FETCH myCursor INTO tempId, tempQ;
         IF (v_finished = 1) THEN
 			LEAVE substract;
 		END IF;
-        
+
         UPDATE warehouse
         SET quantity = quantity - tempQ
         WHERE chipboardId = tempId;
     END LOOP;
-    
+
 END $$
 DELIMITER ;
 
@@ -170,27 +171,27 @@ CREATE USER 'office'@'localhost' IDENTIFIED BY '1234';
 GRANT SELECT
 	ON wholesale.chipboard
     TO 'office'@'localhost';
-    
+
 GRANT SELECT
 	ON wholesale.chipboard_size
     TO 'office'@'localhost';
-    
+
 GRANT SELECT, INSERT, UPDATE
 	ON wholesale.customers
     TO 'office'@'localhost';
-    
+
 GRANT SELECT, INSERT
 	ON wholesale.order_item
     TO 'office'@'localhost';
-    
+
 GRANT SELECT, INSERT
 	ON wholesale.orders
     TO 'office'@'localhost';
-    
+
 GRANT SELECT
 	ON wholesale.warehouse
     TO 'office'@'localhost';
-    
+
 flush PRIVILEGES;
 
 CREATE USER 'ceo'@'localhost' IDENTIFIED BY '1234';
@@ -198,31 +199,31 @@ CREATE USER 'ceo'@'localhost' IDENTIFIED BY '1234';
 GRANT SELECT, INSERT, UPDATE, DELETE
 	ON wholesale.chipboard
     TO 'ceo'@'localhost';
-    
+
 GRANT SELECT, INSERT, UPDATE, DELETE
 	ON wholesale.chipboard_size
     TO 'ceo'@'localhost';
-    
+
 GRANT SELECT, INSERT, UPDATE
 	ON wholesale.customers
     TO 'ceo'@'localhost';
-    
+
 GRANT SELECT
 	ON wholesale.income
     TO 'ceo'@'localhost';
-    
+
 GRANT SELECT
 	ON wholesale.order_item
     TO 'ceo'@'localhost';
-    
+
 GRANT SELECT, INSERT, DELETE
 	ON wholesale.orders
     TO 'ceo'@'localhost';
-    
+
 GRANT SELECT, INSERT, UPDATE
 	ON wholesale.warehouse
     TO 'ceo'@'localhost';
-    
+
 flush PRIVILEGES;
 
 CREATE USER 'warehouseman'@'localhost' IDENTIFIED BY '1234';
@@ -230,23 +231,23 @@ CREATE USER 'warehouseman'@'localhost' IDENTIFIED BY '1234';
 GRANT SELECT
 	ON wholesale.chipboard
     TO 'warehouseman'@'localhost';
-    
+
 GRANT SELECT
 	ON wholesale.chipboard_size
     TO 'warehouseman'@'localhost';
-    
+
 GRANT SELECT, UPDATE
 	ON wholesale.order_item
     TO 'warehouseman'@'localhost';
-    
+
 GRANT SELECT, UPDATE
 	ON wholesale.orders
     TO 'warehouseman'@'localhost';
-    
+
 GRANT SELECT, UPDATE
 	ON wholesale.warehouse
     TO 'warehouseman'@'localhost';
-    
+
 flush PRIVILEGES;
 
 DELIMITER $$
@@ -262,7 +263,7 @@ WHILE iterator < bound do
 	ELSEIF (iterator < 66) THEN
 		INSERT INTO wholesale.chipboard (sizeId, cost)
         VALUE (2, FLOOR(RAND()*2000 + 1000));
-	ELSE 
+	ELSE
 		INSERT INTO wholesale.chipboard (sizeId, cost)
         VALUE (3, FLOOR(RAND()*2000 + 1000));
 	END IF;
@@ -291,7 +292,7 @@ DECLARE bound INT UNSIGNED DEFAULT 20;
 DECLARE iterator INT UNSIGNED DEFAULT 0;
 DECLARE paymentStatus VARCHAR(20) DEFAULT 'DONE';
 DECLARE orderStatus VARCHAR(20) DEFAULT 'DONE';
-	WHILE iterator < bound DO 
+	WHILE iterator < bound DO
 		IF (iterator % 4 = 0) THEN
 			SET paymentStatus = 'DONE';
             SET orderStatus = 'DONE';
@@ -302,7 +303,7 @@ DECLARE orderStatus VARCHAR(20) DEFAULT 'DONE';
 			SET paymentStatus = 'PENDING';
             SET orderStatus = 'SUSPENDED';
         END IF;
-        
+
 	INSERT INTO wholesale.orders (customerId, paymentStatus, orderStatus)
 	VALUE (FLOOR(RAND()*10)+1, paymentStatus, orderStatus);
     SET iterator = iterator + 1;
@@ -315,7 +316,7 @@ INSERT INTO wholesale.chipboard_size (length, width, thicknes)
 VALUES 	(2000, 3000, 20),
 		(2000, 3000, 30),
         (2000, 3000, 40);
-        
+
 CALL fill_chipboard_table();
 
 INSERT INTO wholesale.customers (NIP, name, discount)
@@ -347,4 +348,14 @@ GROUP BY id;
 INSERT INTO warehouse (chipboardId, quantity)
 SELECT id, FLOOR(RAND()*30 + 20) AS quantity
 FROM chipboard;
+
+DELIMITER $$
+CREATE TRIGGER chipboard_after_insert
+AFTER INSERT ON chipboard
+FOR EACH ROW
+BEGIN
+	INSERT INTO warehouse (chipboardId, quantity)
+    VALUE (new.id, 0);
+END $$
+DELIMITER ;
 

@@ -33,6 +33,12 @@ public class DaoIncome implements DaoIncomeInterface {
     return instance;
   }
 
+  public List select() {
+    Session session = HibernateUtil.getSessionFactory().openSession();
+    Query query = session.createQuery("FROM Income ");
+    return query.list();
+  }
+
   public List select(String q, int orderId) {
     Session session = HibernateUtil.getSessionFactory().openSession();
     Query query = null;

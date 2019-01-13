@@ -12,7 +12,13 @@ public interface DaoChipboardInterface {
   String priceOfId = "FROM Chipboard " +
           "WHERE id = :id";
 
+  String updateById = "UPDATE Chipboard " +
+          "SET sizeId = :size, " +
+          "cost = :cost " +
+          "WHERE id = :id ";
+
   void insert(Object object);
   List select(String q, int id);
   List select();
+  int update(String q, int sizeId, double cost, int id);
 }

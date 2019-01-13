@@ -1,5 +1,6 @@
 package models.User;
 
+import Gui.Ceo.CeoGui;
 import Gui.Office.OfficeGui;
 import Gui.Warehouse.WarehouseGui;
 
@@ -43,6 +44,8 @@ public class User implements UserInterface {
       WarehouseGui.getInstance().launch();
     } else if (this.username.equals("office")) {
       OfficeGui.getInstance().launch();
+    } else if (this.username.equals("ceo")) {
+      CeoGui.getInstance().launch();
     }
   }
 }

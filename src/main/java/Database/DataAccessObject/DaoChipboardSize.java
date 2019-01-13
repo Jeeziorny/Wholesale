@@ -1,6 +1,6 @@
 package Database.DataAccessObject;
 
-import Database.DaoInterface.DaoChipboardInterface;
+import Database.DaoInterface.DaoChipboardSizeInterface;
 import Database.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -8,16 +8,16 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
-public class DaoChipboard implements DaoChipboardInterface {
-  private volatile static DaoChipboard instance;
+public class DaoChipboardSize implements DaoChipboardSizeInterface {
+  private volatile static DaoChipboardSize instance;
 
-  private DaoChipboard() {}
+  private DaoChipboardSize() {}
 
-  public static DaoChipboard getInstance() {
+  public static DaoChipboardSize getInstance() {
     if (instance == null) {
       synchronized (DaoOrder.class) {
         if (instance == null) {
-          instance = new DaoChipboard();
+          instance = new DaoChipboardSize();
         }
       }
     }
@@ -37,9 +37,6 @@ public class DaoChipboard implements DaoChipboardInterface {
     if (q.equals(selectById)) {
       query = session.createQuery(selectById);
       query.setParameter("id", id);
-    } else if (q.equals(selectBySizeId)) {
-      query = session.createQuery(selectBySizeId);
-      query.setParameter("sizeId", id);
     }
     try {
       return query.list();
@@ -52,24 +49,23 @@ public class DaoChipboard implements DaoChipboardInterface {
   @Override
   public List select() {
     Session session = HibernateUtil.getSessionFactory().openSession();
-    Query query = session.createQuery("FROM Chipboard ");
+    Query query = session.createQuery("FROM ChipboardSize ");
     return query.list();
   }
 
   @Override
-  public int update(String q, int sizeId, double cost, int id) {
+  public int update(int id, int w, int l, int t) {
     Session session = HibernateUtil.getSessionFactory().openSession();
     int result = -1;
     Transaction tx = null;
     try {
       tx = session.beginTransaction();
-      if (q.equals(updateById)) {
-        Query query = session.createQuery(updateById);
-        query.setParameter("size", sizeId);
-        query.setParameter("id", id);
-        query.setParameter("cost", cost);
-        result = query.executeUpdate();
-      }
+      Query query = session.createQuery(updateById);
+      query.setParameter("id", id);
+      query.setParameter("w", w);
+      query.setParameter("l", l);
+      query.setParameter("t", t);
+      result = query.executeUpdate();
       tx.commit();
     } catch (RuntimeException e) {
       if (tx != null) {
