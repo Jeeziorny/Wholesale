@@ -1,15 +1,16 @@
 package Database.DataAccessObject;
 
-import Database.DaoInterface.DaoOrderInterface;
+import Database.DaoInterface.IDaoOrder;
 import Database.HibernateUtil;
+import models.enums.OrderStatus;
+import models.enums.PaymentStatus;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
-public class DaoOrder implements DaoOrderInterface {
+public class DaoOrder implements IDaoOrder {
   private volatile static DaoOrder instance;
 
   private DaoOrder() {}
@@ -25,6 +26,7 @@ public class DaoOrder implements DaoOrderInterface {
     return instance;
   }
 
+  @Override
   public void insert(Object object) {
     Session session = HibernateUtil.getSessionFactory().openSession();
     session.beginTransaction();
@@ -32,27 +34,20 @@ public class DaoOrder implements DaoOrderInterface {
     session.getTransaction().commit();
   }
 
-  public int update(String q, Enum status, int orderId) {
+  @Override
+  public int update(PaymentStatus status, int orderId) {
     Session session = HibernateUtil.getSessionFactory().openSession();
+    String updatePaymentStatusById =  "UPDATE Order " +
+                                      "SET paymentStatus = :status " +
+                                      "WHERE id = :id";
     int result = -1;
     Transaction tx = null;
     try {
       tx = session.beginTransaction();
-      Query query = null;
-      if (q.equals(updateOrderStatusById)) {
-        query = session.createQuery(updateOrderStatusById);
-        query.setParameter("status", status);
-        query.setParameter("id", orderId);
-      } else if (q.equals(updatePaymentStatusById)) {
-        query = session.createQuery(updatePaymentStatusById);
-        query.setParameter("status", status);
-        query.setParameter("id", orderId);
-      }
-      try {
-        result = query.executeUpdate();
-      } catch (NullPointerException e) {
-        e.printStackTrace();
-      }
+      Query query = session.createQuery(updatePaymentStatusById);
+      query.setParameter("status", status);
+      query.setParameter("id", orderId);
+      result = query.executeUpdate();
       tx.commit();
     } catch (RuntimeException e) {
       if (tx != null) {
@@ -66,21 +61,44 @@ public class DaoOrder implements DaoOrderInterface {
     return result;
   }
 
-  public List select(String q, Enum status) {
+  @Override
+  public int update(OrderStatus status, int orderId) {
     Session session = HibernateUtil.getSessionFactory().openSession();
-    Query query;
-     if (q.equals(selectByOrderStatus)) {
-      query = session.createQuery(selectByOrderStatus);
+    int result = -1;
+    Transaction tx = null;
+    String updateOrderStatusById = "UPDATE Order " +
+                                   "SET orderStatus = :status " +
+                                   "WHERE id = :id";
+    try {
+      tx = session.beginTransaction();
+      Query query = session.createQuery(updateOrderStatusById);
       query.setParameter("status", status);
-      return query.list();
-    } else if (q.equals(selectByPaymentStatus)) {
-      query = session.createQuery(selectByPaymentStatus);
-      query.setParameter("status", status);
-      return query.list();
+      query.setParameter("id", orderId);
+      result = query.executeUpdate();
+      tx.commit();
+    } catch (RuntimeException e) {
+      if (tx != null) {
+        tx.rollback();
+        e.printStackTrace();
+      }
     }
-    return null;
+    finally {
+      session.close();
+    }
+    return result;
   }
 
+  @Override
+  public List select(OrderStatus status) {
+    Session session = HibernateUtil.getSessionFactory().openSession();
+    String selectByOrderStatus = "FROM Order O " +
+                                 "WHERE orderStatus = :status ";
+    Query query = session.createQuery(selectByOrderStatus);
+    query.setParameter("status", status);
+    return query.list();
+  }
+
+  @Override
   public List select(int customerId) {
     Session session = HibernateUtil.getSessionFactory().openSession();
     Query query = session.createQuery("FROM Order O WHERE customerId = :id");
@@ -88,6 +106,7 @@ public class DaoOrder implements DaoOrderInterface {
     return query.list();
   }
 
+  @Override
   public List select() {
     Session session = HibernateUtil.getSessionFactory().openSession();
     Query query = session.createQuery("FROM Order ");

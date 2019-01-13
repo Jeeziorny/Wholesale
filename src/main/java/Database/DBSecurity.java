@@ -3,7 +3,7 @@ package Database;
 import java.io.File;
 import java.io.IOException;
 
-public class DBSecurity implements SecurityInterface{
+public class DBSecurity implements ISecurity {
   private static volatile DBSecurity instance;
 
   private DBSecurity() {

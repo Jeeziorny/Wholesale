@@ -22,7 +22,7 @@ import models.Customer;
 public class OfficeGui implements InvalidationListener {
   private static OfficeGui instance;
 
-  private DaoCustomerInterface daoCustomer = DaoCustomers.getInstance();
+  private IDaoCustomer daoCustomer = DaoCustomers.getInstance();
 
   private Stage stage;
 

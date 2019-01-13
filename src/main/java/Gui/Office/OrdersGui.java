@@ -1,9 +1,7 @@
 package Gui.Office;
 
-import Database.DaoInterface.DaoOrderInterface;
-import Database.DaoInterface.DaoOrderItemIntreface;
+import Database.DaoInterface.IDaoOrder;
 import Database.DataAccessObject.DaoOrder;
-import Database.DataAccessObject.DaoOrderItem;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
@@ -12,7 +10,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -28,7 +25,7 @@ import java.util.List;
 
 public class OrdersGui implements Observable {
   InvalidationListener listener;
-  private DaoOrderInterface daoOrder = DaoOrder.getInstance();
+  private IDaoOrder daoOrder = DaoOrder.getInstance();
 
   private Stage stage;
 
@@ -73,8 +70,7 @@ public class OrdersGui implements Observable {
   }
 
   private void Pay() {
-    this.daoOrder.update(daoOrder.updatePaymentStatusById,
-            PaymentStatus.DONE,
+    this.daoOrder.update(PaymentStatus.DONE,
             currentOrder.getId());
     updateCustomerOrdersTable();
     this.stage.close();

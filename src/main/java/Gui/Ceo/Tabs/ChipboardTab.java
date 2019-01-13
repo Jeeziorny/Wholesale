@@ -1,7 +1,9 @@
 package Gui.Ceo.Tabs;
 
-import Database.DaoInterface.DaoChipboardInterface;
+import Database.DaoInterface.IDaoChipSize;
+import Database.DaoInterface.IDaoChipboard;
 import Database.DataAccessObject.DaoChipboard;
+import Database.DataAccessObject.DaoChipboardSize;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -11,10 +13,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import models.Chipboard;
+import models.ChipboardSize;
+
+import java.util.List;
 
 public class ChipboardTab extends Tab {
   private TableView chipboardTable;
-  private DaoChipboardInterface daoChipboard = DaoChipboard.getInstance();
+  private IDaoChipboard daoChipboard = DaoChipboard.getInstance();
+  private IDaoChipSize daoChipSize = DaoChipboardSize.getInstance();
 
   private TextField idField;
   private TextField sizeField;
@@ -100,8 +106,7 @@ public class ChipboardTab extends Tab {
       int id = Integer.parseInt(idField.getText());
       int sizeId = Integer.parseInt(sizeField.getText());
       double cost = Double.parseDouble(costField.getText());
-      daoChipboard.update(DaoChipboardInterface.updateById,
-              sizeId, cost, id);
+      daoChipboard.update(sizeId, cost, id);
       this.message.setText("");
       updateChipboardTable();
     } catch (NumberFormatException e) {
@@ -116,12 +121,21 @@ public class ChipboardTab extends Tab {
       Chipboard chipboard = new Chipboard();
       chipboard.setCost(cost);
       chipboard.setSizeId(sizeId);
-      daoChipboard.insert(chipboard);
+      if (isSizeAvailable(sizeId)) {
+        daoChipboard.insert(chipboard);
+      }
       this.message.setText("");
       updateChipboardTable();
     } catch (NumberFormatException e) {
       setMessage("Incorrect data to insert");
     }
+  }
+
+  private boolean isSizeAvailable(int sizeId) {
+    List<ChipboardSize> sList = daoChipSize.select(sizeId);
+    if (sList.isEmpty())
+      return false;
+    return true;
   }
 
   private void setMessage(String arg) {

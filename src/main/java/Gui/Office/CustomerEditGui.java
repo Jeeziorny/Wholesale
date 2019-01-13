@@ -1,6 +1,6 @@
 package Gui.Office;
 
-import Database.DaoInterface.DaoCustomerInterface;
+import Database.DaoInterface.IDaoCustomer;
 import Database.DataAccessObject.DaoCustomers;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -18,7 +18,7 @@ import models.Customer;
 public class CustomerEditGui implements Observable {
   InvalidationListener listener;
 
-  private DaoCustomerInterface daoCustomer = DaoCustomers.getInstance();
+  private IDaoCustomer daoCustomer = DaoCustomers.getInstance();
 
   private Customer currentCustomer;
 
@@ -72,10 +72,10 @@ public class CustomerEditGui implements Observable {
   private void updateCustomer() {
     try {
       Integer.parseInt(this.nipField.getText());
-      this.daoCustomer.update(daoCustomer.updateNipById,
+      this.daoCustomer.update(
               Integer.parseInt(this.nipField.getText()),
               this.currentCustomer.getId());
-      this.daoCustomer.update(daoCustomer.updateNameById,
+      this.daoCustomer.update(
               this.nameField.getText(),
               this.currentCustomer.getId());
     } catch (NumberFormatException f) {

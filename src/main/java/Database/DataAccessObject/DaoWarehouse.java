@@ -1,6 +1,6 @@
 package Database.DataAccessObject;
 
-import Database.DaoInterface.DaoWarehouseInterface;
+import Database.DaoInterface.IDaoWarehouse;
 import Database.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -8,14 +8,8 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
-public class DaoWarehouse implements DaoWarehouseInterface {
+public class DaoWarehouse implements IDaoWarehouse {
   private static volatile DaoWarehouse instance;
-
-  public static final String updateQuantityById = "UPDATE Warehouse " +
-                                       "SET quantity = :q " +
-                                       "WHERE chipboardId = :id";
-
-  public static final String selectById = "FROM Warehouse WHERE chipboardId = :id";
 
   public static DaoWarehouse getInstance() {
     if (instance == null) {
@@ -29,22 +23,19 @@ public class DaoWarehouse implements DaoWarehouseInterface {
   }
 
   @Override
-  public int update(String q, int quantity, int id) {
+  public int update(int quantity, int id) {
     Session session = HibernateUtil.getSessionFactory().openSession();
+    String updateQuantityById = "UPDATE Warehouse " +
+                                "SET quantity = :q " +
+                                "WHERE chipboardId = :id";
     int result = -1;
     Transaction tx = null;
     try {
       tx = session.beginTransaction();
-      if (q.equals(updateQuantityById)) {
-        Query query = session.createQuery(q);
-        query.setParameter("q", quantity);
-        query.setParameter("id", id);
-        try {
-          result = query.executeUpdate();
-        } catch (NullPointerException e) {
-          e.printStackTrace();
-        }
-      }
+      Query query = session.createQuery(updateQuantityById);
+      query.setParameter("q", quantity);
+      query.setParameter("id", id);
+      result = query.executeUpdate();
       tx.commit();
     }  catch (RuntimeException e) {
       if (tx != null) {
@@ -69,6 +60,7 @@ public class DaoWarehouse implements DaoWarehouseInterface {
   @Override
   public List select(int id) {
     Session session = HibernateUtil.getSessionFactory().openSession();
+    String selectById = "FROM Warehouse WHERE chipboardId = :id";
     Query query = session.createQuery(selectById);
     query.setParameter("id", id);
     return query.list();

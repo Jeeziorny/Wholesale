@@ -1,6 +1,6 @@
 package Gui.Ceo.Tabs;
 
-import Database.DaoInterface.DaoChipboardSizeInterface;
+import Database.DaoInterface.IDaoChipSize;
 import Database.DataAccessObject.DaoChipboardSize;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,7 +14,7 @@ import models.ChipboardSize;
 
 public class SizeTab extends Tab {
   private TableView sizeTable;
-  private DaoChipboardSizeInterface daoSize = DaoChipboardSize.getInstance();
+  private IDaoChipSize daoSize = DaoChipboardSize.getInstance();
 
   private TextField length;
   private TextField width;

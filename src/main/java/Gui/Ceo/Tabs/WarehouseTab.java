@@ -1,6 +1,6 @@
 package Gui.Ceo.Tabs;
 
-import Database.DaoInterface.DaoWarehouseInterface;
+import Database.DaoInterface.IDaoWarehouse;
 import Database.DataAccessObject.DaoWarehouse;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,7 +13,7 @@ import javafx.scene.layout.VBox;
 import models.Warehouse;
 
 public class WarehouseTab extends Tab {
-  private DaoWarehouseInterface daoWarehouse = DaoWarehouse.getInstance();
+  private IDaoWarehouse daoWarehouse = DaoWarehouse.getInstance();
 
   private TableView warehouseTable;
 
@@ -52,7 +52,7 @@ public class WarehouseTab extends Tab {
   private void updateWarehouse() {
     try {
       int q = Integer.parseInt(quantityField.getText());
-      daoWarehouse.update(DaoWarehouse.updateQuantityById, q, currentPosition.getChipboardId());
+      daoWarehouse.update(q, currentPosition.getChipboardId());
       updateWarehouseTable();
       confirm.setDisable(true);
     } catch (NumberFormatException e) {

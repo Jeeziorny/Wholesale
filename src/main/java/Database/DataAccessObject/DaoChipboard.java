@@ -1,6 +1,6 @@
 package Database.DataAccessObject;
 
-import Database.DaoInterface.DaoChipboardInterface;
+import Database.DaoInterface.IDaoChipboard;
 import Database.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -8,7 +8,7 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
-public class DaoChipboard implements DaoChipboardInterface {
+public class DaoChipboard implements IDaoChipboard {
   private volatile static DaoChipboard instance;
 
   private DaoChipboard() {}
@@ -24,6 +24,7 @@ public class DaoChipboard implements DaoChipboardInterface {
     return instance;
   }
 
+  @Override
   public void insert(Object object) {
     Session session = HibernateUtil.getSessionFactory().openSession();
     session.beginTransaction();
@@ -31,22 +32,15 @@ public class DaoChipboard implements DaoChipboardInterface {
     session.getTransaction().commit();
   }
 
-  public List select(String q, int id) {
-    Session session = HibernateUtil.getSessionFactory().openSession();
-    Query query = null;
-    if (q.equals(selectById)) {
-      query = session.createQuery(selectById);
-      query.setParameter("id", id);
-    } else if (q.equals(selectBySizeId)) {
-      query = session.createQuery(selectBySizeId);
-      query.setParameter("sizeId", id);
-    }
-    try {
-      return query.list();
-    } catch (NullPointerException e) {
-      e.printStackTrace();
-    }
-    return null;
+  @Override
+  public List select(int id) {
+    Session session = HibernateUtil
+            .getSessionFactory().openSession();
+    String selectById = "FROM Chipboard " +
+            "WHERE id = :id";
+    Query query = session.createQuery(selectById);
+    query.setParameter("id", id);
+    return query.list();
   }
 
   @Override
@@ -57,19 +51,21 @@ public class DaoChipboard implements DaoChipboardInterface {
   }
 
   @Override
-  public int update(String q, int sizeId, double cost, int id) {
+  public int update(int sizeId, double cost, int id) {
+    String updateById = "UPDATE Chipboard " +
+                        "SET sizeId = :size, " +
+                        "cost = :cost " +
+                        "WHERE id = :id ";
     Session session = HibernateUtil.getSessionFactory().openSession();
     int result = -1;
     Transaction tx = null;
     try {
       tx = session.beginTransaction();
-      if (q.equals(updateById)) {
-        Query query = session.createQuery(updateById);
-        query.setParameter("size", sizeId);
-        query.setParameter("id", id);
-        query.setParameter("cost", cost);
-        result = query.executeUpdate();
-      }
+      Query query = session.createQuery(updateById);
+      query.setParameter("size", sizeId);
+      query.setParameter("id", id);
+      query.setParameter("cost", cost);
+      result = query.executeUpdate();
       tx.commit();
     } catch (RuntimeException e) {
       if (tx != null) {

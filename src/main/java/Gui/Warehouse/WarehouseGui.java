@@ -1,10 +1,9 @@
 package Gui.Warehouse;
 
-import Database.DaoInterface.DaoOrderInterface;
-import Database.DaoInterface.DaoOrderItemIntreface;
+import Database.DaoInterface.IDaoOrder;
+import Database.DaoInterface.IDaoOrderItem;
 import Database.DataAccessObject.DaoOrder;
 import Database.DataAccessObject.DaoOrderItem;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -24,8 +23,8 @@ import models.enums.OrderStatus;
 
 public class WarehouseGui {
   private static WarehouseGui instance;
-  private DaoOrderInterface daoOrder = DaoOrder.getInstance();
-  private DaoOrderItemIntreface daoOrderItem = DaoOrderItem.getInstance();
+  private IDaoOrder daoOrder = DaoOrder.getInstance();
+  private IDaoOrderItem daoOrderItem = DaoOrderItem.getInstance();
 
   private Stage stage;
 
@@ -94,7 +93,8 @@ public class WarehouseGui {
     updateOrderTable();
 
     this.Orders.getColumns().setAll(idCol, customerIdCol, OrderStatusCol);
-    this.Orders.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+    this.Orders.getSelectionModel().selectedItemProperty()
+            .addListener((obs, oldSelection, newSelection) -> {
       if (newSelection != null) {
         this.currentOrder = (Order) newSelection;
         updateOrderSpecificationTable();
@@ -105,7 +105,7 @@ public class WarehouseGui {
 
   private void updateOrderTable() {
     ObservableList<Order> orders = FXCollections.observableArrayList();
-    for (Object o : daoOrder.select(daoOrder.selectByOrderStatus, OrderStatus.PENDING)) {
+    for (Object o : daoOrder.select(OrderStatus.PENDING)) {
       Order obj = (Order) o;
       orders.add(obj);
     }
@@ -128,7 +128,7 @@ public class WarehouseGui {
 
   private void updateOrderSpecificationTable() {
     ObservableList<OrderItem> orderItems = FXCollections.observableArrayList();
-    for (Object o : daoOrderItem.select(daoOrderItem.selectByOrderId, this.currentOrder.getId())) {
+    for (Object o : daoOrderItem.select(this.currentOrder.getId())) {
       OrderItem obj = (OrderItem) o;
       orderItems.add(obj);
     }
@@ -155,30 +155,38 @@ public class WarehouseGui {
 
   private void activateButtons() {
     this.construct.setOnMousePressed(e -> {
-      daoOrder.update(daoOrder.updateOrderStatusById, OrderStatus.CONSTRUCTION, this.currentOrder.getId());
-      updateOrderTable();
-      issue.setDisable(true);
-      setState(OrderStatus.CONSTRUCTION);
+      if (this.currentOrder != null) {
+        daoOrder.update(OrderStatus.CONSTRUCTION, this.currentOrder.getId());
+        updateOrderTable();
+        issue.setDisable(true);
+        setState(OrderStatus.CONSTRUCTION);
+      }
     });
 
     this.done.setOnMousePressed(e -> {
-     daoOrder.update(daoOrder.updateOrderStatusById, OrderStatus.DONE, this.currentOrder.getId());
-     updateOrderTable();
-     OrderSpecification.getItems().clear();
-     setState(OrderStatus.DONE);
+      if (this.currentOrder != null) {
+        daoOrder.update(OrderStatus.DONE, this.currentOrder.getId());
+        updateOrderTable();
+        OrderSpecification.getItems().clear();
+        setState(OrderStatus.DONE);
+      }
     });
 
     this.lackOfMaterials.setOnMousePressed(e -> {
-      daoOrder.update(daoOrder.updateOrderStatusById, OrderStatus.LACK_OF_MATERIALS, this.currentOrder.getId());
-      updateOrderTable();
-      OrderSpecification.getItems().clear();
-      setState(OrderStatus.PENDING);
+      if (this.currentOrder != null) {
+        daoOrder.update(OrderStatus.LACK_OF_MATERIALS, this.currentOrder.getId());
+        updateOrderTable();
+        OrderSpecification.getItems().clear();
+        setState(OrderStatus.PENDING);
+      }
     });
     this.issue.setOnMousePressed(e -> {
-      daoOrder.update(daoOrder.updateOrderStatusById, OrderStatus.ISSUED, this.currentOrder.getId());
-      updateOrderTable();
-      OrderSpecification.getItems().clear();
-      setState(OrderStatus.PENDING);
+      if (this.currentOrder != null) {
+        daoOrder.update(OrderStatus.ISSUED, this.currentOrder.getId());
+        updateOrderTable();
+        OrderSpecification.getItems().clear();
+        setState(OrderStatus.PENDING);
+      }
     });
   }
 

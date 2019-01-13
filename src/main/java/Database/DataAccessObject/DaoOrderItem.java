@@ -1,13 +1,13 @@
 package Database.DataAccessObject;
 
-import Database.DaoInterface.DaoOrderItemIntreface;
+import Database.DaoInterface.IDaoOrderItem;
 import Database.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 import java.util.List;
 
-public class DaoOrderItem implements DaoOrderItemIntreface {
+public class DaoOrderItem implements IDaoOrderItem {
   private volatile static DaoOrderItem instance;
 
   private DaoOrderItem() {}
@@ -23,6 +23,7 @@ public class DaoOrderItem implements DaoOrderItemIntreface {
     return instance;
   }
 
+  @Override
   public void insert(Object object) {
     Session session = HibernateUtil.getSessionFactory().openSession();
     session.beginTransaction();
@@ -30,18 +31,13 @@ public class DaoOrderItem implements DaoOrderItemIntreface {
     session.getTransaction().commit();
   }
 
-  public List select(String q, int orderId) {
+  @Override
+  public List select(int orderId) {
     Session session = HibernateUtil.getSessionFactory().openSession();
-    Query query = null;
-    if (q.equals(selectByOrderId)) {
-      query = session.createQuery(selectByOrderId);
-      query.setParameter("orderId", orderId);
-    }
-    try {
-      return query.list();
-    } catch (NullPointerException e) {
-      e.printStackTrace();
-    }
-    return null;
+    String selectByOrderId = "FROM OrderItem O " +
+                             "WHERE orderId = :orderId";
+    Query query = session.createQuery(selectByOrderId);
+    query.setParameter("orderId", orderId);
+    return query.list();
   }
 }

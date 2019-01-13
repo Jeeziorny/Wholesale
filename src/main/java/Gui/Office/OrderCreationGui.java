@@ -2,7 +2,7 @@ package Gui.Office;
 
 import Database.DaoInterface.*;
 import Database.DataAccessObject.*;
-import javafx.application.Platform;
+import Database.DataAccessObject.DaoChipboard;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
@@ -25,9 +25,9 @@ import models.enums.PaymentStatus;
 public class OrderCreationGui implements Observable {
   private InvalidationListener listener;
 
-  private DaoChipboardInterface daoChipboard = DaoChipboard.getInstance();
-  private DaoOrderInterface daoOrder = DaoOrder.getInstance();
-  private DaoOrderItemIntreface daoOrderItem = DaoOrderItem.getInstance();
+  private DaoChipboard daoChipboard = DaoChipboard.getInstance();
+  private IDaoOrder daoOrder = DaoOrder.getInstance();
+  private IDaoOrderItem daoOrderItem = DaoOrderItem.getInstance();
 
   private TableView Chipboards;
   private TableView orderTable;

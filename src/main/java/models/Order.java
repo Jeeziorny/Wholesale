@@ -1,11 +1,8 @@
 package models;
 
-import Database.DaoInterface.DaoChipboardInterface;
-import Database.DaoInterface.DaoCustomerInterface;
-import Database.DaoInterface.DaoOrderItemIntreface;
-import Database.DataAccessObject.DaoChipboard;
+import Database.DaoInterface.IDaoCustomer;
+import Database.DaoInterface.IDaoOrderItem;
 import Database.DataAccessObject.DaoCustomers;
-import Database.DataAccessObject.DaoOrder;
 import Database.DataAccessObject.DaoOrderItem;
 import models.enums.OrderStatus;
 import models.enums.PaymentStatus;
@@ -63,13 +60,18 @@ public class Order implements Serializable {
 
   }
 
+  //TODO:
+  /*
+  - CEO nie ma uprawnien do przyjmowania zaplaty za zamowienie;
+  - CEO nie ma uprawnien do insertowania w orderItem;
+   */
   public double getPrice() {
-    DaoOrderItemIntreface daoOrderItem = DaoOrderItem.getInstance();
-    DaoCustomerInterface daoCustomer = DaoCustomers.getInstance();
+    IDaoOrderItem daoOrderItem = DaoOrderItem.getInstance();
+    IDaoCustomer daoCustomer = DaoCustomers.getInstance();
     List<OrderItem> itemList = daoOrderItem
-            .select(daoOrderItem.selectByOrderId, getId());
+            .select(getId());
     final Customer customer = ((Customer) daoCustomer
-            .select(((DaoCustomers) daoCustomer).selectById, getCustomerId())
+            .select(getCustomerId())
             .get(0));
     double result = 0;
     try {

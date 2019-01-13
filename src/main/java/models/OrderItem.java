@@ -1,6 +1,6 @@
 package models;
 
-import Database.DaoInterface.DaoChipboardInterface;
+import Database.DaoInterface.IDaoChipboard;
 import Database.DataAccessObject.DaoChipboard;
 
 import java.io.Serializable;
@@ -47,9 +47,9 @@ public class OrderItem implements Serializable {
   }
 
   public double getPrice() {
-    DaoChipboardInterface daoChipboard = DaoChipboard.getInstance();
+    IDaoChipboard daoChipboard = DaoChipboard.getInstance();
     List<Chipboard> result = ((DaoChipboard) daoChipboard)
-            .select(DaoChipboardInterface.priceOfId, getChipboardId());
+            .select(getChipboardId());
     return ((Chipboard) result.get(0)).getCost()
             *this.quantity
             *(1-this.owner.getDiscount());

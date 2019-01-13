@@ -1,6 +1,6 @@
 package Database;
 
-public interface SecurityInterface {
+public interface ISecurity {
   void backup(String name);
   int restore(String name);
 }

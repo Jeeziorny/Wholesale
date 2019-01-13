@@ -1,6 +1,6 @@
 package Gui.Ceo.Tabs;
 
-import Database.DaoInterface.DaoIncomeInterface;
+import Database.DaoInterface.IDaoIncome;
 import Database.DataAccessObject.DaoIncome;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 
 public class IncomeTab extends Tab {
   private TableView incomeTable;
-  private DaoIncomeInterface daoIncome = DaoIncome.getInstance();
+  private IDaoIncome daoIncome = DaoIncome.getInstance();
 
   public IncomeTab() {
     super("Income");

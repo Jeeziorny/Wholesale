@@ -1,7 +1,7 @@
 package Gui.Ceo.Tabs;
 
 import Database.DBSecurity;
-import Database.SecurityInterface;
+import Database.ISecurity;
 import Gui.Office.OfficeGui;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,7 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class SecurityTab extends Tab {
-  private SecurityInterface handler = DBSecurity.getInstance();
+  private ISecurity handler = DBSecurity.getInstance();
 
   private Button backupButton = new Button("Backup");
   private Button restoreButton = new Button("Restore");
