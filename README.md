@@ -8,8 +8,5 @@ Technologie, których użyłem w projekcie:
 - [JUnit 4](https://github.com/KantJ/Wholesale/tree/master/src/test/java),
 - [proste skrypty w BAT](https://github.com/KantJ/Wholesale/tree/master/src/main/resources),
 - Maven,
-- wzorce projektowe:
-..- singleton,
-..- dao,
-..- obserwator.
+- wzorce projektowe: singleton, dao, obserwator.
 
