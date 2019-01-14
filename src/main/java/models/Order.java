@@ -60,11 +60,6 @@ public class Order implements Serializable {
 
   }
 
-  //TODO:
-  /*
-  - CEO nie ma uprawnien do przyjmowania zaplaty za zamowienie;
-  - CEO nie ma uprawnien do insertowania w orderItem;
-   */
   public double getPrice() {
     IDaoOrderItem daoOrderItem = DaoOrderItem.getInstance();
     IDaoCustomer daoCustomer = DaoCustomers.getInstance();

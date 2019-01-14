@@ -33,7 +33,7 @@ CREATE TABLE customers (
     discount	DOUBLE NOT NULL
 );
 
-CREATE TABLE orders ( /* USUNALEM CHARGE */
+CREATE TABLE orders (
 	id				INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     customerId		INT NOT NULL,
     paymentStatus	ENUM('DONE', 'PENDING'),
@@ -208,15 +208,15 @@ GRANT SELECT, INSERT, UPDATE
 	ON wholesale.customers
     TO 'ceo'@'localhost';
 
-GRANT SELECT
+GRANT SELECT, UPDATE, DELETE
 	ON wholesale.income
     TO 'ceo'@'localhost';
 
-GRANT SELECT
+GRANT SELECT, INSERT, UPDATE
 	ON wholesale.order_item
     TO 'ceo'@'localhost';
 
-GRANT SELECT, INSERT, DELETE
+GRANT SELECT, INSERT, UPDATE, DELETE
 	ON wholesale.orders
     TO 'ceo'@'localhost';
 
@@ -321,7 +321,7 @@ CALL fill_chipboard_table();
 
 INSERT INTO wholesale.customers (NIP, name, discount)
 VALUES 	(222222221, 'TOMPOL', 0.1),
-		(222222231, 'KAMPOL', 0),
+		    (222222231, 'KAMPOL', 0),
         (222222211, 'PRZEMPOL', 0),
         (222222111, 'KUBAPOL', 0.3),
         (222221111, 'RAFPOL', 0.6),
@@ -358,4 +358,3 @@ BEGIN
     VALUE (new.id, 0);
 END $$
 DELIMITER ;
-

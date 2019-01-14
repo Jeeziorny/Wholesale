@@ -49,6 +49,7 @@ public class DaoOrder implements IDaoOrder {
       query.setParameter("id", orderId);
       result = query.executeUpdate();
       tx.commit();
+      update(OrderStatus.PENDING, orderId);
     } catch (RuntimeException e) {
       if (tx != null) {
         tx.rollback();
